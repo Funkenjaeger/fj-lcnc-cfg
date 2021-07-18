@@ -1,0 +1,105 @@
+o<measure> sub
+
+#2001=0.05    (Z up distance between probes)
+#2004=100    (Z up feed rate.)
+
+#1702=0               (Safe Z position for tool change)
+#1900=#<_coord_system>  (Save current coordinate system.)
+#<coordinate_system> = #5220 (Current coordinate system number: 1=G54, 9=G59.3)
+#<wcs_z_varnumber> = [5203 + [20* #5220]] (5223 for G54, 5243 for G55, etc)
+#<wcs_z> = #[#<wcs_z_varnumber>]
+M5                                                                 (Turn spindle off)
+
+o500 if[#<_current_tool> EQ #<_selected_tool>]                     (Same tool as before so no need to do anything.)
+
+o500 else 
+	(This is a different tool.)
+	#<method>=1			(Proceed)
+	
+	o200 if [#<_current_tool> EQ 0]
+		(No tool loaded yet)
+		M102
+		M66 E20 L0	
+		#<method> = #5399
+		(print,sub M102 returned #5399)
+		o210 if [#<method> EQ 2]
+			(Invalidate WCS Z offset)
+			#[#<wcs_z_varnumber>] = 999
+		o210 endif
+		o211 if [#<method> LT 0]
+			(abort,User cancelled M6 via dialog)
+		o211
+		(If method=<3>adjust, nothing to do yet)
+	o200 endif
+	
+	G90 G0                                                          (Absolute distance mode Rapid move)
+	G53 Z#1702	   	 (Change Z Position)
+	G53 X#<_ini[TOOLSENSOR]X_CHANGE_LOC> Y#<_ini[TOOLSENSOR]Y_CHANGE_LOC>   	 	(Change XY Position)
+	G59.3															(Switch temporarily to G59.3 WCS for probing)
+	G10 L2 P9 X0 Y0 Z0												(Zero out work coordinate offsets in G59.3)
+	M6 T#<_selected_tool>										   (Do built-in M6 routine - pops up prompt)
+	G43                                                             (Enable tool length compensation)
+	
+	;G49 (Cancel tool length compensation)
+
+	(Measure tool to get offset)
+	G53 X#<_ini[TOOLSENSOR]X_LOC> Y#<_ini[TOOLSENSOR]Y_LOC>      (Move to tool setter postion)
+	G53 Z#<_ini[TOOLSENSOR]Z_PROBE_START>                        (Move Z  to safe height above tool setter to start probe)
+	S500 M4														 (Run spindle in reverse at minimum speed)
+	G91                                                          (Incremental Mode)
+	G38.2 Z#<_ini[TOOLSENSOR]Z_PROBE_DISTANCE> F#<_ini[TOOLSENSOR]SEARCH_VEL>            (Measure Gross)
+	G38.5 Z#2001 F#<_ini[TOOLSENSOR]SEARCH_VEL>
+	;G43.1 Z0                                                     (Dynamic Tool Length Offset set to zero.)
+	G1 Z#2001 F#2004                                            	(Z up)	
+	G38.2 Z[-2*#2001] F#<_ini[TOOLSENSOR]PROBE_VEL>				(Measure fine)
+	;#2000=[#5063+#5223]	 		(Touch point + work coordinate offset)
+	;#2000=[#5063]	 			(Touch point)
+	;#2001=[#2000-#2002+#2003] 	(New TP - old TP + old offset)  
+	;#2002=[#2000]      	 		(Remember old touch point)
+	;#2003=[#2001]	   	 		(Remember old offset)
+	;G10 L2 P#<coordinate_system> Z[#[4000+#<coordinate_system>]+#5063]
+	;G43.1 Z#2001       	 (TLO set)
+	#<new_tlo> = #5063
+	G43.1 Z#<new_tlo>
+	G38.5 Z#2001 F#<_ini[TOOLSENSOR]SEARCH_VEL>
+	G1 Z.1 F#<_ini[TOOLSENSOR]SEARCH_VEL>
+	M5 
+	G90 G0                                                       (Absolute distance mode, Rapid move)
+	G53 Z#1702                                                   (Z up to safe position)
+	M61 Q#<_selected_tool>											(Set current tool)
+	
+	o300 if [#<method> EQ 3]
+		(Adjust WCS Z using old value & new tool length offset)
+		(print,old WCS_Z=#<wcs_z>, new TLO=#<new_tlo>, new WCS_Z=[#<wcs_z>-#<new_tlo>])
+		#[#<wcs_z_varnumber>] = [#<wcs_z>-#<new_tlo>]
+	o300 endif
+	
+	(Restore orginal coordinate system. G54 to G59.2 only)
+	o100 if[#1900 EQ 540]
+	  G54
+	o100 endif
+	o101 if[#1900 EQ 550]
+	  G55
+	o101 endif
+	o102 if[#1900 EQ 560]
+	  G56
+	o102 endif
+	o103 if[#1900 EQ 570]
+	  G57
+	o103 endif
+	o104 if[#1900 EQ 580]
+	  G58
+	o104 endif
+	o105 if[#1900 EQ 590]
+	  G59
+	o105 endif
+	o106 if[#1900 EQ 591]
+	  G59.1
+	o106 endif
+	o107 if[#1900 EQ 592]
+	  G59.2
+	o107 endif
+o500 endif
+o<measure> endsub
+M2
+

@@ -1,0 +1,86 @@
+[DIALOG_OPTIONS]
+EntryDialog_play_sound = True
+EntryDialog_sound_type = READY
+toolDialog_play_sound = True
+toolDialog_speak = True
+toolDialog_sound_type = READY
+MachineLogDialog_play_sound = True
+MachineLogDialog_sound_type = READY
+RunFromLineDialog_play_sound = True
+RunFromLineDialog_sound_type = READY
+CalculatorDialog_play_sound = True
+CalculatorDialog_sound_type = READY
+
+[DIALOG_GEOMETRY]
+ToolChangeDialog-geometry = 0 31 303 124
+LncMessage-geometry = 0 0 100 30
+
+[SCREEN_OPTIONS]
+catch_errors = True
+desktop_notify = True
+shutdown_check = True
+sound_player_on = False
+mainwindow_geometry = 0 31 1600 1160
+
+[MCH_MSG_OPTIONS]
+mchnMsg_play_sound = True
+mchnMsg_speak_errors = True
+mchnMsg_sound_type = RING
+
+[USR_MSG_OPTIONS]
+usermsg_play_sound = True
+userMsg_sound_type = RING
+userMsg_use_focusOverlay = True
+
+[SHUTDOWN_OPTIONS]
+shutdown_play_sound = True
+shutdown_alert_sound_type = READY
+shutdown_exit_sound_type = LOGOUT
+shutdown_msg_title = Do you want to Shutdown now?
+shutdown_msg_detail = 
+
+[NOTIFY_OPTIONS]
+notify_start_greeting = True
+notify_start_title = Welcome
+notify_start_detail = This option can be changed in the preference file
+notify_start_timeout = 5
+
+[BOOK_KEEPING]
+last_loaded_directory = /home/evand/linuxcnc/nc_files
+last_loaded_file = /home/evand/linuxcnc/nc_files/measure.ngc
+style_QSS_Path = /usr/share/qtvcp/screens/qtdragon/qtdragon_dark.qss
+
+[PROBE OPTIONS]
+Probe tool = 99
+Probe rapid = 10.0
+Probe max xy = 10.0
+Probe max z = 2.0
+Probe extra depth = 0.0
+Probe step off = 10.0
+Probe feed = 10.0
+Probe xy clearance = 10.0
+Probe z clearance = 10.0
+Probe edge width = 10.0
+
+[CUSTOM_FORM_ENTRIES]
+Tool to load = 0
+Laser X = 100.0
+Laser Y = -20.0
+Sensor X = -26.39
+Sensor Y = -12.75
+Work Height = 1.0
+Touch Height = 0.757
+Sensor Height = 2.0
+Search Velocity = 10.0
+Probe Velocity = 2.0
+Max Probe = 1.0
+Eoffset count = 0
+External offsets = False
+Reload program = False
+Reload tool = False
+Use keyboard = False
+Run from line = False
+Use virtual keyboard = False
+Use alpha display mode = False
+Inhibit display mouse selection = True
+
