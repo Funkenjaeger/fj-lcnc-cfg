@@ -1,9 +1,5 @@
 o<measure> sub
 
-#2001=0.05    (Z up distance between probes)
-#2004=100    (Z up feed rate.)
-
-#1702=0               (Safe Z position for tool change)
 #1900=#<_coord_system>  (Save current coordinate system.)
 #<coordinate_system> = #5220 (Current coordinate system number: 1=G54, 9=G59.3)
 #<wcs_z_varnumber> = [5203 + [20* #5220]] (5223 for G54, 5243 for G55, etc)
@@ -15,6 +11,7 @@ o500 if[#<_current_tool> EQ #<_selected_tool>]                     (Same tool as
 o500 else 
 	(This is a different tool.)
 	#<method>=1			(Proceed)
+	M64 P1				(Turn on spindle purge air)
 	
 	o200 if [#<_current_tool> EQ 0]
 		(No tool loaded yet)
@@ -28,16 +25,40 @@ o500 else
 		o210 endif
 		o211 if [#<method> LT 0]
 			(abort,User cancelled M6 via dialog)
-		o211
+		o211 endif
 		(If method=<3>adjust, nothing to do yet)
 	o200 endif
 	
 	G90 G0                                                          (Absolute distance mode Rapid move)
-	G53 Z#1702	   	 (Change Z Position)
-	G53 X#<_ini[TOOLSENSOR]X_CHANGE_LOC> Y#<_ini[TOOLSENSOR]Y_CHANGE_LOC>   	 	(Change XY Position)
+	G53 Z#<_ini[TOOLSENSOR]Z_SAFE>	   	 (Change Z Position)
+	
 	G59.3															(Switch temporarily to G59.3 WCS for probing)
 	G10 L2 P9 X0 Y0 Z0												(Zero out work coordinate offsets in G59.3)
-	M6 T#<_selected_tool>										   (Do built-in M6 routine - pops up prompt)
+	
+	o201 if [#<_hal[tool-change-mode]>]
+		; AUTOMATIC TOOL CHANGE
+		#<pocket_current_x> = [#<_ini[TOOL_CHANGE]POCKET_1_X> + [[#<_current_tool> - 1] * #<_ini[TOOL_CHANGE]POCKET_DELTA_X>]]
+		#<pocket_selected_x> = [#<_ini[TOOL_CHANGE]POCKET_1_X> + [[#<_selected_tool> - 1] * #<_ini[TOOL_CHANGE]POCKET_DELTA_X>]]
+		#<pocket_approach_y> = [#<_ini[TOOL_CHANGE]POCKET_Y> + #<_ini[TOOL_CHANGE]POCKET_SAFE_MOVE_Y>]
+		#<pocket_safe_z> = [#<_ini[TOOL_CHANGE]POCKET_Z> + #<_ini[TOOL_CHANGE]POCKET_SAFE_RETRACT_Z>]
+		G53 G0 X#<pocket_current_x> Y#<pocket_approach_y>								(Rapid XY to approach position for current tool's pocket)
+		G53 G0 Z#<_ini[TOOL_CHANGE]POCKET_Z> 											(Rapid Z to pocket height)
+		G53 G1 Y#<_ini[TOOL_CHANGE]POCKET_Y> F#<_ini[TOOL_CHANGE]APPROACH_VELOCITY>		(Slot tool into pocket)
+		M64 P0 																			(Release drawbar)
+		G4 P#<_ini[TOOL_CHANGE]DWELL_TIME>												(Wait for drawbar release)
+		G53 G0 Z#<pocket_safe_z>														(Rapid Z to clear tool holders)
+		G53 G0 X#<pocket_selected_x>													(Rapid X over selected tool)
+		G53 G1 Z#<_ini[TOOL_CHANGE]POCKET_Z> F#<_ini[TOOL_CHANGE]APPROACH_VELOCITY>		(Move Z onto selected tool)
+		M65 P0 																			(Engage drawbar)
+		G4 P#<_ini[TOOL_CHANGE]DWELL_TIME>												(Wait for drawbar engagement)
+		G53 G1 Y#<pocket_approach_y>													(Slot tool out of pocket)
+		G53 G0 Z0																		(Rapid retract Z)
+	o201 else
+		; MANUAL TOOL CHANGE
+		G53 X#<_ini[TOOL_CHANGE]MANUAL_CHANGE_LOC_X> Y#<_ini[TOOL_CHANGE]MANUAL_CHANGE_LOC_Y>   	 	(Move XY to manual change position)
+		M6 T#<_selected_tool>										   (Do built-in M6 routine - pops up prompt)
+	o201 endif
+	
 	G43                                                             (Enable tool length compensation)
 	
 	;G49 (Cancel tool length compensation)
@@ -48,25 +69,21 @@ o500 else
 	S500 M4														 (Run spindle in reverse at minimum speed)
 	G91                                                          (Incremental Mode)
 	G38.2 Z#<_ini[TOOLSENSOR]Z_PROBE_DISTANCE> F#<_ini[TOOLSENSOR]SEARCH_VEL>            (Measure Gross)
-	G38.5 Z#2001 F#<_ini[TOOLSENSOR]SEARCH_VEL>
+	G38.5 Z#<_ini[TOOLSENSOR]Z_BACKOFF> F#<_ini[TOOLSENSOR]SEARCH_VEL>
 	;G43.1 Z0                                                     (Dynamic Tool Length Offset set to zero.)
-	G1 Z#2001 F#2004                                            	(Z up)	
-	G38.2 Z[-2*#2001] F#<_ini[TOOLSENSOR]PROBE_VEL>				(Measure fine)
-	;#2000=[#5063+#5223]	 		(Touch point + work coordinate offset)
-	;#2000=[#5063]	 			(Touch point)
-	;#2001=[#2000-#2002+#2003] 	(New TP - old TP + old offset)  
-	;#2002=[#2000]      	 		(Remember old touch point)
-	;#2003=[#2001]	   	 		(Remember old offset)
-	;G10 L2 P#<coordinate_system> Z[#[4000+#<coordinate_system>]+#5063]
-	;G43.1 Z#2001       	 (TLO set)
+	G0 Z#<_ini[TOOLSENSOR]Z_BACKOFF>                                            	(Z up)	
+	G38.2 Z[-2*#<_ini[TOOLSENSOR]Z_BACKOFF>] F#<_ini[TOOLSENSOR]PROBE_VEL>				(Measure fine)
+	
 	#<new_tlo> = #5063
 	G43.1 Z#<new_tlo>
-	G38.5 Z#2001 F#<_ini[TOOLSENSOR]SEARCH_VEL>
+	G38.5 Z#<_ini[TOOLSENSOR]Z_BACKOFF> F#<_ini[TOOLSENSOR]SEARCH_VEL>
 	G1 Z.1 F#<_ini[TOOLSENSOR]SEARCH_VEL>
 	M5 
 	G90 G0                                                       (Absolute distance mode, Rapid move)
-	G53 Z#1702                                                   (Z up to safe position)
+	G53 Z#<_ini[TOOLSENSOR]Z_SAFE>                                                   (Z up to safe position)
 	M61 Q#<_selected_tool>											(Set current tool)
+	
+	M65 P1				(Turn off spindle purge air)
 	
 	o300 if [#<method> EQ 3]
 		(Adjust WCS Z using old value & new tool length offset)

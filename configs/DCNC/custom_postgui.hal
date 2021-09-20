@@ -12,6 +12,8 @@ net z-home-sw	  =>  qtdragon.hal_led_home_z
 
 net probe-in => qtdragon.hal_led_probe
 
+net tool-change-mode <= qtdragon.tool_change_mode_button
+
 # enable manual tool change prompt in qtdragon
 net tool-change      hal_manualtoolchange.change   <=  iocontrol.0.tool-change
 net tool-changed     hal_manualtoolchange.changed  <=  iocontrol.0.tool-changed
