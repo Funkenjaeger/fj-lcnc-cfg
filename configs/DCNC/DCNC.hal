@@ -4,7 +4,7 @@
 # overwritten when you run PNCconf again
 
 loadrt [KINS]KINEMATICS
-loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS num_aio=64
+loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS num_aio=64 num_dio=64
 loadrt hostmot2
 loadrt hm2_eth board_ip="10.10.10.10" config=" num_encoders=0 num_pwmgens=0 num_stepgens=4 sserial_port_0=0000xx" 
 setp   hm2_7i93.0.watchdog.timeout_ns 5000000
@@ -346,6 +346,12 @@ setp hm2_7i93.0.gpio.032.is_output TRUE
 #  ---digital in / out signals---
 net atc-drawbar <= motion.digital-out-00
 net atc-purge	<= motion.digital-out-01
+net tool-pocket-sensor-1 motion.digital-in-00 <= hm2_7i93.0.gpio.000.in_not
+net tool-pocket-sensor-2 motion.digital-in-01 <= hm2_7i93.0.gpio.001.in_not
+net tool-pocket-sensor-3 motion.digital-in-02 <= hm2_7i93.0.gpio.002.in_not
+net tool-pocket-sensor-4 motion.digital-in-03 <= hm2_7i93.0.gpio.003.in_not
+net tool-pocket-sensor-5 motion.digital-in-04 <= hm2_7i93.0.gpio.004.in_not
+net tool-pocket-sensor-6 motion.digital-in-05 <= hm2_7i93.0.gpio.005.in_not
 
 #  ---estop signals---
 
@@ -373,4 +379,3 @@ setp hm2_7i93.0.gpio.016.is_output TRUE
 net atc-purge 	=> hm2_7i93.0.gpio.017.out
 setp hm2_7i93.0.gpio.017.invert_output TRUE
 setp hm2_7i93.0.gpio.017.is_output TRUE
-net atc-button	<= hm2_7i93.0.gpio.000.in_not

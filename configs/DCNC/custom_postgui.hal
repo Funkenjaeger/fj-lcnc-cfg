@@ -10,6 +10,13 @@ net x-home-sw	  =>  qtdragon.hal_led_home_x
 net y-home-either or2.1.out	  =>  qtdragon.hal_led_home_y
 net z-home-sw	  =>  qtdragon.hal_led_home_z
 
+net tool-pocket-sensor-1 => qtdragon.hal_led_pocket_1
+net tool-pocket-sensor-2 => qtdragon.hal_led_pocket_2
+net tool-pocket-sensor-3 => qtdragon.hal_led_pocket_3
+net tool-pocket-sensor-4 => qtdragon.hal_led_pocket_4
+net tool-pocket-sensor-5 => qtdragon.hal_led_pocket_5
+net tool-pocket-sensor-6 => qtdragon.hal_led_pocket_6
+
 net probe-in => qtdragon.hal_led_probe
 
 net tool-change-mode <= qtdragon.tool_change_mode_button

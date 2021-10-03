@@ -63,7 +63,7 @@ Probe z clearance = 10.0
 Probe edge width = 10.0
 
 [CUSTOM_FORM_ENTRIES]
-Tool to load = 0
+Tool to load = 1
 Laser X = 100.0
 Laser Y = -20.0
 Sensor X = -26.39

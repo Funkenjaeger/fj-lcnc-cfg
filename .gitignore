@@ -605,3 +605,7 @@ qtvcp/screens/qtdragon/qtdragon.qss
 configs/DCNC/autosave.halscope
 
 *.ignore
+
+*.halshow
+
+qtvcp/screens/qtdragon/qtdragon.qrc.20211002
