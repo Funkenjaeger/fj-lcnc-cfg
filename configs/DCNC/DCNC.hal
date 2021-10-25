@@ -4,16 +4,19 @@
 # overwritten when you run PNCconf again
 
 loadrt [KINS]KINEMATICS
-loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS num_aio=64 num_dio=64
+loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS num_aio=32 num_dio=32
 loadrt hostmot2
-loadrt hm2_eth board_ip="10.10.10.10" config=" num_encoders=0 num_pwmgens=0 num_stepgens=4 sserial_port_0=0000xx" 
+loadrt hm2_eth board_ip="10.10.10.10" config="num_encoders=0 num_pwmgens=0 num_stepgens=4 sserial_port_0=0000xx" 
 setp   hm2_7i93.0.watchdog.timeout_ns 5000000
 loadrt pid names=pid.x,pid.yl,pid.yr,pid.z,pid.s
 loadrt debounce cfg=2
 addf debounce.0    servo-thread
 setp debounce.0.delay 4 # debounce delay LSB = ticks of servo-thread, i.e. 1ms
-loadrt or2 count=2
+loadrt or2 count=3
 addf or2.0 servo-thread
+addf or2.2 servo-thread
+loadrt lut5 count=1
+addf lut5.0 servo-thread
 loadrt not count=2
 addf not.0 servo-thread
 loadrt estop_latch
@@ -32,11 +35,87 @@ addf hm2_7i93.0.write         servo-thread
 setp hm2_7i93.0.dpll.01.timer-us -50
 setp hm2_7i93.0.stepgen.timer-number 1
 
-# external output signals
+# ---------------------------------------------------------
+# DIO/AIO               FILE               NOTE
+# motion.digital-in-00  this               tool-pocket-sensor-1
+# motion.digital-in-01  this               tool-pocket-sensor-2
+# motion.digital-in-02  this               tool-pocket-sensor-3
+# motion.digital-in-03  this               tool-pocket-sensor-4
+# motion.digital-in-04  this               tool-pocket-sensor-5
+# motion.digital-in-05  this               tool-pocket-sensor-6
+# motion.digital-in-06  this               optical-in
+# motion.digital-in-07  this               pressure-switch
+# motion.digital-out-00 this               atc_drawbar
+# motion.digital-out-01 this               atc_purge
+# motion.digital-out-02 this               optical-enable
+# motion.digital-out-03 this               result of toolholder check
+# motion.analog-out-00  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-01  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-02  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-03  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-04  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-05  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-06  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-07  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-08  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-09  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-10  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-11  custom_postgui.hal qtdragon probing stuff
+# motion.analog-out-12  custom_postgui.hal qtdragon probing stuff
+# motion.analog-in-20   M102/measure.ngc   NGC->Python
 
+# RESOURCE   FILE               NOTE
+# or2.0      this               Not in use
+# or2.1      custom_postgui.hal Y left/right home switches
+# or2.2      this               combining estop sources
+# not.0      this               Not in use
+# not.1      this               Not in use
+# lut5.0     this               combining probe sources
 
-# external input signals
-
+# MESA PIN             FILE                   DIR   BREAKOUT   SIGNAL
+# hm2_7i93.0.gpio.000  this                   IN    7i37-IN0   tool-pocket-sensor-1
+# hm2_7i93.0.gpio.001  this                   IN    7i37-IN1   tool-pocket-sensor-2
+# hm2_7i93.0.gpio.002  this                   IN    7i37-IN2   tool-pocket-sensor-3
+# hm2_7i93.0.gpio.003  this                   IN    7i37-IN3   tool-pocket-sensor-4
+# hm2_7i93.0.gpio.004  this                   IN    7i37-IN4   tool-pocket-sensor-5
+# hm2_7i93.0.gpio.005  this                   IN    7i37-IN5   tool-pocket-sensor-6
+# hm2_7i93.0.gpio.006  this                   IN    7i37-IN6   optical-in
+# hm2_7i93.0.gpio.007  this                   IN    7i37-IN7   pressure-switch
+# hm2_7i93.0.gpio.008  -                      -     7i37-IN8   Not used
+# hm2_7i93.0.gpio.009  -                      -     7i37-IN9   Not used
+# hm2_7i93.0.gpio.010  -                      -     7i37-IN10  Not used 
+# hm2_7i93.0.gpio.011  -                      -     7i37-IN11  Not used
+# hm2_7i93.0.gpio.012  -                      -     7i37-IN12  Not used
+# hm2_7i93.0.gpio.013  -                      -     7i37-IN13  Not used
+# hm2_7i93.0.gpio.014  -                      -     7i37-IN14  Not used
+# hm2_7i93.0.gpio.015  -                      -     7i37-IN15  Not used
+# hm2_7i93.0.gpio.016  this                   OUT   7i37-OUT0  atc-drawbar
+# hm2_7i93.0.gpio.017  this                   OUT   7i37-OUT1  atc-purge
+# hm2_7i93.0.gpio.018  this                   OUT   7i37-OUT2  optical-enable
+# hm2_7i93.0.gpio.019  -                      -     7i37-OUT3  Not used
+# hm2_7i93.0.gpio.020  -                      -     7i37-OUT4  Not used
+# hm2_7i93.0.gpio.021  -                      -     7i37-OUT5  Not used 
+# hm2_7i93.0.gpio.022  -                      -     7i37-OUT6  Not used
+# hm2_7i93.0.gpio.023  -                      -     7i37-OUT7  Not used
+# hm2_7i93.0.stepgen.00 this                  -     EMD        X stepgen - IO pins 24 & 25
+# hm2_7i93.0.stepgen.01 this                  -     EMD        YL stepgen - IO pins 26 & 27
+# hm2_7i93.0.stepgen.02 this                  -     EMD        YR stepgen - IO pins 28 & 29
+# hm2_7i93.0.stepgen.03 this                  -     EMD        Z stepgen - IO pins 30 & 31
+# hm2_7i93.0.gpio.032  this                   OUT   EMD        machine-is-enabled
+# hm2_7i93.0.gpio.033  -                      -     EMD        Not used (is MOTOR_FAULT)
+# hm2_7i93.0.gpio.034  this                   IN    EMD        x_home_sw
+# hm2_7i93.0.gpio.035  this                   IN    EMD        yl_home_sw
+# hm2_7i93.0.gpio.036  this                   IN    EMD        yr_home_sw
+# hm2_7i93.0.gpio.037  this                   IN    EMD        z_home_sw
+# hm2_7i93.0.gpio.038  this                   IN    EMD        probe-raw
+# hm2_7i93.0.gpio.039  -                      -     EMD        Not used (is PROBE2)
+# hm2_7i93.0.gpio.040  this                   IN    EMD        toolsetter-raw
+# hm2_7i93.0.gpio.041  this                   IN    EMD        toolsetter-overtravel
+# hm2_7i93.0.gpio.042  -                      -     EMD        Not used (is FEEDHOLD)
+# hm2_7i93.0.gpio.043  -                      -     EMD        Not used (is CYCLESTOP)
+# hm2_7i93.0.gpio.044  -                      -     EMD        Not used (is CYCLESTART)
+# hm2_7i93.0.gpio.045  this                   IN    EMD        estop-input
+# I/O pins 46 & 47 are dedicated to serial interface (not currently implemented)
 
 #*******************
 #  AXIS X JOINT 0
@@ -329,11 +408,19 @@ net coolant-flood     <=  iocontrol.0.coolant-flood
 net probe-raw debounce.0.0.in <= hm2_7i93.0.gpio.038.in
 net probe-in    =>  motion.probe-input
 # net probe-in	<=  debounce.0.0.out
-net probe-debounced or2.0.in0 <= debounce.0.0.out
-net toolsetter-debounced or2.0.in1 <= debounce.0.1.out
-net probe-in <= or2.0.out
+# lut5.0 function = 5-input OR
+setp lut5.0.function 0xfffffffe
+net probe-debounced lut5.0.in-0 <= debounce.0.0.out
+net toolsetter-debounced lut5.0.in-1 <= debounce.0.1.out
+net optical-in lut5.0.in-2 <= hm2_7i93.0.gpio.006.in_not
+net optical-in => motion.digital-in-06
+setp lut5.0.in-3 0
+setp lut5.0.in-4 0
+net probe-in <= lut5.0.out
 net toolsetter-raw debounce.0.1.in <= hm2_7i93.0.gpio.040.in_not
-
+net optical-enable motion.digital-out-02 => hm2_7i93.0.gpio.018.out
+setp hm2_7i93.0.gpio.018.invert_output TRUE
+setp hm2_7i93.0.gpio.018.is_output TRUE
 
 #  ---motion control signals---
 
@@ -352,13 +439,16 @@ net tool-pocket-sensor-3 motion.digital-in-02 <= hm2_7i93.0.gpio.002.in_not
 net tool-pocket-sensor-4 motion.digital-in-03 <= hm2_7i93.0.gpio.003.in_not
 net tool-pocket-sensor-5 motion.digital-in-04 <= hm2_7i93.0.gpio.004.in_not
 net tool-pocket-sensor-6 motion.digital-in-05 <= hm2_7i93.0.gpio.005.in_not
+net pressure-switch motion.digital-in-07 <= hm2_7i93.0.gpio.007.in_not
 
 #  ---estop signals---
 
 net estop-loopout iocontrol.0.emc-enable-in <= estop-latch.0.ok-out
 net estop-loopin iocontrol.0.user-enable-out => estop-latch.0.ok-in
 net estop-reset iocontrol.0.user-request-enable => estop-latch.0.reset
-net remote-estop estop-latch.0.fault-in <=  hm2_7i93.0.gpio.045.in
+net remote-estop estop-latch.0.fault-in <=  or2.2.out
+net estop-input or2.2.in0 <= hm2_7i93.0.gpio.045.in
+net toolsetter-overtravel or2.2.in1 <= hm2_7i93.0.gpio.041.in_not
 
 
 #  ---manual tool change signals---
@@ -379,3 +469,4 @@ setp hm2_7i93.0.gpio.016.is_output TRUE
 net atc-purge 	=> hm2_7i93.0.gpio.017.out
 setp hm2_7i93.0.gpio.017.invert_output TRUE
 setp hm2_7i93.0.gpio.017.is_output TRUE
+net toolholder-sensed <= motion.digital-out-03

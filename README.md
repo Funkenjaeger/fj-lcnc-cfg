@@ -39,10 +39,8 @@ The following are key details about my CNC machine, to give context to this over
     * In Manual tool change mode, the machine moves to a convenient location and prompts the user to change the tool.  
     * In Automatic tool change mode, the machine changes the tool automatically (of course) - [Example](https://www.youtube.com/watch?v=98X_LPUHFn0 "ATC example video")
     * Following tool change, the machine moves over the tool setter (fixed location on machine bed)
-    * Spindle runs counterclockwise at low RPM during probe move to reduce variation based on uncontrolled tool orientation
-        * The tool length offset is measured with zero work offset (using G59.3) and therefore the measured tool length offset is equivalent to the absolute Z position in machine coordinates at the point where the tool contacted the setter.
-            * TLO value is always negative
-            * TLO is independent of active work coordinate offsets (e.g. G54)
-    * There is risk of ending up with a bad Z offset in the event that the operator sets a WCS Z offset **prior** to measuring/setting the tool length offset (via M6).  To help mitigate this, when M6 is called with no tool yet loaded (current tool = 0), a warning dialog comes up giving the operator a few options for how to proceed.
+    * The tool length offset is measured with zero work offset (using G59.3) and therefore the measured tool length offset is equivalent to the absolute Z position in machine coordinates at the point where the tool contacted the setter.
+        * TLO value is always negative
+        * TLO is independent of active work coordinate offsets (e.g. G54)
 * Hitachi WJ200 VFD controlled via Modbus using USB-RS485 adapter 
 * iMach P4S pendant

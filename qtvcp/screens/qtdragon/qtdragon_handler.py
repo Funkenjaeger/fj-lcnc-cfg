@@ -400,8 +400,21 @@ class HandlerClass:
         if self.first_turnon is True:
             self.first_turnon = False
             if self.w.chk_reload_tool.isChecked():
-                command = "M61 Q{}".format(self.reload_tool)
-                ACTION.CALL_MDI(command)
+                ACTION.CALL_MDI_WAIT("M200")
+                toolholder_sensed = hal.get_value("toolholder-sensed")
+                if toolholder_sensed:
+                    if self.reload_tool:
+                        command = "M61 Q{}".format(self.reload_tool)
+                        ACTION.CALL_MDI(command)
+                    else:
+                        info = 'Warning: Tool holder sensed, but last known tool was T0 - please manually set tool number or unload tool holder'
+                        mess = {'NAME':'MESSAGE', 'ICON':'WARNING', 'ID':'_UNKNOWNTOOL',  'MESSAGE':'CAUTION', 'MORE':info, 'TYPE':'OK'}
+                        ACTION.CALL_DIALOG(mess)
+                        self.add_alarm(info)
+                else:
+                    command = "M61 Q0"
+                    ACTION.CALL_MDI(command)
+                self.w.tool_change_mode_button.setChecked(True)
             if self.last_loaded_program is not None and self.w.chk_reload_program.isChecked():
                 if os.path.isfile(self.last_loaded_program):
                     self.w.cmb_gcode_history.addItem(self.last_loaded_program)
@@ -729,7 +742,7 @@ class HandlerClass:
         elif selector == 'sensor':
             z_offset = float(self.w.lineEdit_sensor_height.text()) - float(self.w.lineEdit_work_height.text())
         else:
-            self.add_alarm("Unknown touchoff routine specified")
+            self.all_h("Unknown touchoff routine specified")
             return
         self.add_status("Touchoff to {} started".format(selector))
         max_probe = self.w.lineEdit_max_probe.text()
@@ -776,7 +789,7 @@ class HandlerClass:
 
     def add_status(self, message):
         self._m = message
-        print message
+        print(message)
         self.w.statusbar.showMessage(self._m, 5000)
         STATUS.emit('update-machine-log', self._m, 'TIME')
 
