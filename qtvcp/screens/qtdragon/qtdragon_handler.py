@@ -405,15 +405,17 @@ class HandlerClass:
                 if toolholder_sensed:
                     if self.reload_tool:
                         command = "M61 Q{}".format(self.reload_tool)
-                        ACTION.CALL_MDI(command)
+                        ACTION.CALL_MDI_WAIT(command)
                     else:
                         info = 'Warning: Tool holder sensed, but last known tool was T0 - please manually set tool number or unload tool holder'
                         mess = {'NAME':'MESSAGE', 'ICON':'WARNING', 'ID':'_UNKNOWNTOOL',  'MESSAGE':'CAUTION', 'MORE':info, 'TYPE':'OK'}
                         ACTION.CALL_DIALOG(mess)
                         self.add_alarm(info)
+                    ACTION.CALL_MDI_WAIT("M201",15)
                 else:
                     command = "M61 Q0"
                     ACTION.CALL_MDI(command)
+                ACTION.CALL_MDI("G53 G0 Z0")
                 self.w.tool_change_mode_button.setChecked(True)
             if self.last_loaded_program is not None and self.w.chk_reload_program.isChecked():
                 if os.path.isfile(self.last_loaded_program):

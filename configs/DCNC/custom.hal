@@ -17,6 +17,6 @@ net machine-is-enabled	=>	wj200-vfd-emd.0.enable
 net spindle-current		<=	wj200-vfd-emd.0.motor-current
 net spindle-fault		<=	wj200-vfd-emd.0.is-alarm
 
-# note 24000 RPM = 400 RPS, so 1 RPS = 1 Hz, no scale factor required
+### note 24000 RPM = 400 RPS, so 1 RPS = 1 Hz, no scale factor required
 net spindle-vel-cmd-rps-abs    <= wj200-vfd-emd.0.commanded-frequency
 net spindle-vel-fb-rps <= wj200-vfd-emd.0.actual-frequency

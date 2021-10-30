@@ -10,22 +10,27 @@ RunFromLineDialog_play_sound = True
 RunFromLineDialog_sound_type = READY
 CalculatorDialog_play_sound = True
 CalculatorDialog_sound_type = READY
+fileDialog_play_sound = True
+fileDialog_sound_type = READY
 
 [DIALOG_GEOMETRY]
-ToolChangeDialog-geometry = 0 31 303 124
+ToolChangeDialog-geometry = 2 31 340 239
 LncMessage-geometry = 0 0 100 30
+CalculatorDialog-geometry = 750 568 472 376
 
 [SCREEN_OPTIONS]
 catch_errors = True
 desktop_notify = True
 shutdown_check = True
 sound_player_on = False
-mainwindow_geometry = 0 31 1600 1160
+mainwindow_geometry = 0 5 1600 1160
+notify_max_msgs = 5
 
 [MCH_MSG_OPTIONS]
 mchnMsg_play_sound = True
 mchnMsg_speak_errors = True
 mchnMsg_sound_type = RING
+mchnMsg_speak_text = True
 
 [USR_MSG_OPTIONS]
 usermsg_play_sound = True
@@ -38,12 +43,13 @@ shutdown_alert_sound_type = READY
 shutdown_exit_sound_type = LOGOUT
 shutdown_msg_title = Do you want to Shutdown now?
 shutdown_msg_detail = 
+shutdown_msg_focus_text = 
 
 [NOTIFY_OPTIONS]
-notify_start_greeting = True
+notify_start_greeting = False
 notify_start_title = Welcome
 notify_start_detail = This option can be changed in the preference file
-notify_start_timeout = 5
+notify_start_timeout = 1
 
 [BOOK_KEEPING]
 last_loaded_directory = /home/evand/linuxcnc/nc_files
@@ -61,9 +67,16 @@ Probe feed = 10.0
 Probe xy clearance = 10.0
 Probe z clearance = 10.0
 Probe edge width = 10.0
+Probe diameter = 4
+Probe search = 10
+Probe max travel = 10
+Calibration offset = 0
+Cal x width = 0
+Cal y width = 0
+Cal diameter = 0
 
 [CUSTOM_FORM_ENTRIES]
-Tool to load = 1
+Tool to load = 11
 Laser X = 100.0
 Laser Y = -20.0
 Sensor X = -26.39
@@ -77,10 +90,44 @@ Max Probe = 1.0
 Eoffset count = 0
 External offsets = False
 Reload program = False
-Reload tool = False
+Reload tool = True
 Use keyboard = False
 Run from line = False
 Use virtual keyboard = False
 Use alpha display mode = False
 Inhibit display mouse selection = True
+Camera X = 10.0
+Camera Y = 10.0
+Use tool sensor = False
+Use camera = False
+
+[ORIGINOFFSET_SYSTEM_NAMES]
+__dialogOffsetViewWidget-G54 = User System 1
+__dialogOffsetViewWidget-G55 = User System 2
+__dialogOffsetViewWidget-G56 = User System 3
+__dialogOffsetViewWidget-G57 = User System 4
+__dialogOffsetViewWidget-G58 = User System 5
+__dialogOffsetViewWidget-G59 = User System 6
+__dialogOffsetViewWidget-G59.1 = User System 7
+__dialogOffsetViewWidget-G59.2 = User System 8
+__dialogOffsetViewWidget-G59.3 = User System 9
+offset_table-G54 = User System 1
+offset_table-G55 = User System 2
+offset_table-G56 = User System 3
+offset_table-G57 = User System 4
+offset_table-G58 = User System 5
+offset_table-G59 = User System 6
+offset_table-G59.1 = User System 7
+offset_table-G59.2 = User System 8
+offset_table-G59.3 = User System 9
+
+[FILEMANAGER_JUMPLIST]
+
+[SCREEN_CONTROL_LAST_SETTING]
+gcodegraphics-user-view = p
+gcodegraphics-user-zoom = 10.0
+gcodegraphics-user-panx = 0.0
+gcodegraphics-user-pany = 0.0
+gcodegraphics-user-lat = 0.0
+gcodegraphics-user-lon = 0.0
 

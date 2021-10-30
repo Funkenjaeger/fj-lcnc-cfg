@@ -1,26 +1,24 @@
 <RCC>
-  <qresource prefix="buttons">
-    <file>../../images/qtdragon/images/a_minus_jog_button.png</file>
-    <file>../../images/qtdragon/images/a_minus_jog_button.png</file>
-    <file>../../images/qtdragon/images/a_plus_jog_button.png</file>
-    <file>../../images/qtdragon/images/atc_spindle_tool.png</file>
-    <file>../../images/qtdragon/images/brushed_metal.png</file>
-    <file>../../images/qtdragon/images/D_logo_tight.svg</file>
-    <file>../../images/qtdragon/images/Left_arrow.png</file>
-    <file>../../images/qtdragon/images/linuxcnc-wizard.gif</file>
-    <file>../../images/qtdragon/images/Right_arrow.png</file>
-    <file>../../images/qtdragon/images/silver_dragon.png</file>
-    <file>../../images/qtdragon/images/tool_probe.png</file>
-    <file>../../images/qtdragon/images/x_minus_jog_button.png</file>
-    <file>../../images/qtdragon/images/x_plus_jog_button.png</file>
-    <file>../../images/qtdragon/images/y_minus_jog_button.png</file>
-    <file>../../images/qtdragon/images/y_plus_jog_button.png</file>
-    <file>../../images/qtdragon/images/z_minus_jog_button.png</file>
-    <file>../../images/qtdragon/images/z_plus_jog_button.png</file>
-  </qresource>
-  <qresource prefix="images">
-    <file>../../images/qtdragon/images/brushed_metal.png</file>
-    <file>../../images/qtdragon/checked.png</file>
-    <file>../../images/qtdragon/unchecked.png</file>
+  <qresource prefix="/images">
+    <file>images/a_minus_jog_button.png</file>
+    <file>images/a_minus_jog_button.png</file>
+    <file>images/a_plus_jog_button.png</file>
+    <file>images/atc_spindle_tool.png</file>
+    <file>images/brushed_metal.png</file>
+    <file>images/D_logo_tight.svg</file>
+    <file>images/Left_arrow.png</file>
+    <file>images/linuxcnc-wizard.gif</file>
+    <file>images/Right_arrow.png</file>
+    <file>images/D_logo_tight.svg</file>
+    <file>images/tool_probe.png</file>
+    <file>images/x_minus_jog_button.png</file>
+    <file>images/x_plus_jog_button.png</file>
+    <file>images/y_minus_jog_button.png</file>
+    <file>images/y_plus_jog_button.png</file>
+    <file>images/z_minus_jog_button.png</file>
+    <file>images/z_plus_jog_button.png</file>
+    <file>images/brushed_metal.png</file>
+    <file>images/checked.png</file>
+    <file>images/unchecked.png</file>
   </qresource>
 </RCC>
