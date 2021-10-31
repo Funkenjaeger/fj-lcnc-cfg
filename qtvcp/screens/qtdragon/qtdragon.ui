@@ -628,7 +628,7 @@
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap resource="qtdragon.qrc">:/images/tool_probe.png</pixmap>
+                   <pixmap resource="qtdragon.qrc">:/images/images/tool_probe.png</pixmap>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -1344,7 +1344,7 @@ SENSOR</string>
                      <string/>
                     </property>
                     <property name="pixmap">
-                     <pixmap resource="qtdragon.qrc">:/images/atc_spindle_tool.png</pixmap>
+                     <pixmap resource="qtdragon.qrc">:/images/images/atc_spindle_tool.png</pixmap>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
@@ -3264,8 +3264,8 @@ FILE</string>
                              <string/>
                             </property>
                             <property name="icon">
-                             <iconset>
-                              <normaloff>/images/Right_arrow.png</normaloff>/images/Right_arrow.png</iconset>
+                             <iconset resource="qtdragon.qrc">
+                              <normaloff>:/images/images/Right_arrow.png</normaloff>:/images/images/Right_arrow.png</iconset>
                             </property>
                             <property name="iconSize">
                              <size>
@@ -3302,8 +3302,8 @@ FILE</string>
                              <string/>
                             </property>
                             <property name="icon">
-                             <iconset>
-                              <normaloff>/images/Left_arrow.png</normaloff>/images/Left_arrow.png</iconset>
+                             <iconset resource="qtdragon.qrc">
+                              <normaloff>:/images/images/Left_arrow.png</normaloff>:/images/images/Left_arrow.png</iconset>
                             </property>
                             <property name="iconSize">
                              <size>
@@ -5060,7 +5060,7 @@ TO FILE</string>
                              <string/>
                             </property>
                             <property name="pixmap">
-                             <pixmap resource="qtdragon.qrc">:/images/D_logo_tight.svg</pixmap>
+                             <pixmap resource="qtdragon.qrc">:/images/images/D_logo_tight.svg</pixmap>
                             </property>
                             <property name="scaledContents">
                              <bool>true</bool>
@@ -5643,7 +5643,7 @@ ERRORS</string>
                          </property>
                          <property name="icon">
                           <iconset resource="qtdragon.qrc">
-                           <normaloff>:/images/z_minus_jog_button.png</normaloff>:/images/z_minus_jog_button.png</iconset>
+                           <normaloff>:/images/images/z_minus_jog_button.png</normaloff>:/images/images/z_minus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
                           <size>
@@ -5687,7 +5687,7 @@ ERRORS</string>
                          </property>
                          <property name="icon">
                           <iconset resource="qtdragon.qrc">
-                           <normaloff>:/images/x_minus_jog_button.png</normaloff>:/images/x_minus_jog_button.png</iconset>
+                           <normaloff>:/images/images/x_minus_jog_button.png</normaloff>:/images/images/x_minus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
                           <size>
@@ -5761,7 +5761,7 @@ ERRORS</string>
                          </property>
                          <property name="icon">
                           <iconset resource="qtdragon.qrc">
-                           <normaloff>:/images/y_plus_jog_button.png</normaloff>:/images/y_plus_jog_button.png</iconset>
+                           <normaloff>:/images/images/y_plus_jog_button.png</normaloff>:/images/images/y_plus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
                           <size>
@@ -5841,7 +5841,7 @@ ERRORS</string>
                          </property>
                          <property name="icon">
                           <iconset resource="qtdragon.qrc">
-                           <normaloff>:/images/y_minus_jog_button.png</normaloff>:/images/y_minus_jog_button.png</iconset>
+                           <normaloff>:/images/images/y_minus_jog_button.png</normaloff>:/images/images/y_minus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
                           <size>
@@ -5921,7 +5921,7 @@ ERRORS</string>
                          </property>
                          <property name="icon">
                           <iconset resource="qtdragon.qrc">
-                           <normaloff>:/images/x_plus_jog_button.png</normaloff>:/images/x_plus_jog_button.png</iconset>
+                           <normaloff>:/images/images/x_plus_jog_button.png</normaloff>:/images/images/x_plus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
                           <size>
@@ -6001,7 +6001,7 @@ ERRORS</string>
                          </property>
                          <property name="icon">
                           <iconset resource="qtdragon.qrc">
-                           <normaloff>:/images/z_plus_jog_button.png</normaloff>:/images/z_plus_jog_button.png</iconset>
+                           <normaloff>:/images/images/z_plus_jog_button.png</normaloff>:/images/images/z_plus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
                           <size>
@@ -6039,7 +6039,7 @@ ERRORS</string>
                          </property>
                          <property name="icon">
                           <iconset resource="qtdragon.qrc">
-                           <normaloff>:/images/a_minus_jog_button.png</normaloff>:/images/a_minus_jog_button.png</iconset>
+                           <normaloff>:/images/images/a_minus_jog_button.png</normaloff>:/images/images/a_minus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
                           <size>
@@ -6080,7 +6080,7 @@ ERRORS</string>
                          </property>
                          <property name="icon">
                           <iconset resource="qtdragon.qrc">
-                           <normaloff>:/images/a_plus_jog_button.png</normaloff>:/images/a_plus_jog_button.png</iconset>
+                           <normaloff>:/images/images/a_plus_jog_button.png</normaloff>:/images/images/a_plus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
                           <size>
