@@ -1,0 +1,65 @@
+#!/usr/bin/python
+import sys
+from PyQt5.QtWidgets import QApplication, QDialog, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QToolTip
+import hal
+
+P_ACTION    = "motion.analog-in-20"
+#P_VALUE     = "motion.analog-in-21"
+
+class toolsetter_dialog(QDialog):
+    def cancel(self):
+        hal.set_p(P_ACTION,"-1")
+        print "Cancel button pushed"
+        sys.exit()
+
+    def proceed(self):
+        hal.set_p(P_ACTION,"1")
+        print "Proceed button pushed"
+        sys.exit()
+
+    def invalidate(self):
+        hal.set_p(P_ACTION,"2")
+        print "Invalidate button pushed"
+        sys.exit()
+
+    def adjust(self):
+        hal.set_p(P_ACTION,"3")
+        print "Adjust button pushed"
+        sys.exit()
+
+    def __init__(self):
+        self.h = hal.component("foo")
+        QDialog.__init__(self)
+        self.setWindowTitle("Warning")
+        self.message = QLabel("You doing an initial tool length measurement, but already have a nonzero work coordinate offset.\
+            \nHow would you like to proceed?")
+        self.button_proceed = QPushButton("Proceed as-is")
+        self.button_proceed.clicked.connect(self.proceed)
+        self.button_proceed.setToolTip("Leave current WCS offset in place - \n\n\
+NOTE: Be sure to sanity check your overall Z position afterward, as this can yield a very wrong offset")
+        self.button_invalidate = QPushButton("Invalidate WCS Z")
+        self.button_invalidate.clicked.connect(self.invalidate)
+        self.button_invalidate.setToolTip("Invalidate Work Coordinate System Z Offset by setting it to an extreme value. \n\n\
+NOTE: This is a safe bet if you're planning to set Z zero after setting tool length, because the\n\
+extreme WCS Z offset will effectively prevent absolute position moves in Z until then.")
+        self.button_adjust = QPushButton("Adjust WCS Z")
+        self.button_adjust.clicked.connect(self.adjust)
+        self.button_adjust.setToolTip("After touching off the tool, adjust the Work Coordinate System Z offset by the new tool length, preserving overall Z offset.\n\n\
+NOTE: This ONLY makes sense if the currently loaded tool was used to set the WCS Z offset, such as if\n\
+you inadvertently touched off the tool to the workpiece prior to establishing the tool length offset.")
+        self.button_cancel = QPushButton("Cancel")
+        self.button_cancel.clicked.connect(self.cancel)
+        v_layout = QVBoxLayout(self)
+        v_layout.addWidget(self.message)
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self.button_proceed)
+        button_layout.addWidget(self.button_invalidate)
+        button_layout.addWidget(self.button_adjust)
+        button_layout.addWidget(self.button_cancel)
+        v_layout.addLayout(button_layout)
+
+
+app = QApplication([])
+window = toolsetter_dialog()
+window.show()
+sys.exit(app.exec_())

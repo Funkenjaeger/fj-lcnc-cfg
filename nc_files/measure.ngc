@@ -1,0 +1,76 @@
+o<measure> sub
+ #<coord_system_was>=#<_coord_system>  (Save current coordinate system.)
+ #<wcs_z_varnumber> = [5203 + [20* #5220]] (5223 for G54, 5243 for G55, etc)
+ #<wcs_z> = #[#<wcs_z_varnumber>]
+
+ M70                                                                (Save modal state)
+ M5                                                                 (Turn spindle off)
+ M9                                                                 (Turn coolant off)
+ G17 G20 G40 G64 P0.001 G80 G94 G97 G98                             (Baseline modal state)
+ 
+
+ o217 if [#<coord_system_was> EQ 593]
+  (msg,Note: G59.3 coordinate system is active, be sure that's what you intended!)
+ o217 endif
+ 
+ G59.3																		(Switch temporarily to G59.3 WCS for probing)
+ G10 L2 P9 X0 Y0 Z0															(Zero out work coordinate offsets in G59.3)
+
+ G43																		(Enable tool length compensation)
+
+ G28.1																		(Read current absolute position in machine coordinates into #5161-5166)
+ o300 if [ [ ABS[#5161 - #<_ini[TOOLSENSOR]X_LOC>] LT 0.01 ] AND [ ABS[#5162 - #<_ini[TOOLSENSOR]Y_LOC>] LT 0.01 ] ]
+	G53 G0 X#<_ini[TOOLSENSOR]X_LOC> Y#<_ini[TOOLSENSOR]Y_LOC>					(Move to tool setter postion)
+ o300 else
+	G53 G90 G0 Z0																(Z up)
+	G53 G0 X#<_ini[TOOLSENSOR]X_LOC> Y#<_ini[TOOLSENSOR]Y_LOC>					(Move to tool setter postion)
+	G53 G0 Z#<_ini[TOOLSENSOR]Z_PROBE_START>									(Move Z  to safe height above tool setter to start probe)
+ o300 endif
+ 
+ (Measure tool to get offset)
+ ;S500 M4																	(Run spindle in reverse at minimum speed - Note: causes downstream issues, don't do this!)
+ M64 P2																		(Turn on optical sensor)
+ G38.2 G90 Z#<_ini[TOOLSENSOR]Z_PROBE_END> F#<_ini[TOOLSENSOR]SEARCH_VEL>	(Probe move to optical sensor)
+ M65 P2																		(Turn off optical sensor)
+ M66 P6 L4 Q1																(Wait for optical-in to deactivate)
+ G38.2 G90 Z#<_ini[TOOLSENSOR]Z_PROBE_END> F#<_ini[TOOLSENSOR]COARSE_VEL>	(Measure Gross)
+ G38.5 G91 Z#<_ini[TOOLSENSOR]Z_BACKOFF> F#<_ini[TOOLSENSOR]FINE_VEL>		(Back off until probe breaks contact)
+ ;G0 G91 Z#<_ini[TOOLSENSOR]Z_BACKOFF>										(Back off safe distance)
+ ;G38.2 G90 Z#<_ini[TOOLSENSOR]Z_PROBE_END> F#<_ini[TOOLSENSOR]FINE_VEL>		(Measure fine)
+ #<_new_tlo> = #5063
+ M5																			(Stop spindle)
+ ;G38.5 G91 Z#<_ini[TOOLSENSOR]Z_BACKOFF> F#<_ini[TOOLSENSOR]COARSE_VEL>		(Back off until probe breaks contact)
+ ;G0 G91 Z#<_ini[TOOLSENSOR]Z_BACKOFF>										(Back off safe distance)		
+ G53 G90 G0 Z#<_ini[TOOLSENSOR]Z_SAFE>										(Z up to safe position)
+
+ (Restore original coordinate system. G54 to G59.2 only)
+ o100 if[#<coord_system_was> EQ 540]
+   G54
+ o100 endif
+ o101 if[#<coord_system_was> EQ 550]
+   G55
+ o101 endif
+ o102 if[#<coord_system_was> EQ 560]
+   G56
+ o102 endif
+ o103 if[#<coord_system_was> EQ 570]
+   G57
+ o103 endif
+ o104 if[#<coord_system_was> EQ 580]
+   G58
+ o104 endif
+ o105 if[#<coord_system_was> EQ 590]
+   G59
+ o105 endif
+ o106 if[#<coord_system_was> EQ 591]
+   G59.1
+ o106 endif
+ o107 if[#<coord_system_was> EQ 592]
+   G59.2
+ o107 endif
+
+M72                                                                			(Restore saved modal state)
+G43.1 Z#<_new_tlo>															(Set Dynamic TLO)
+
+o<measure> endsub
+M2
