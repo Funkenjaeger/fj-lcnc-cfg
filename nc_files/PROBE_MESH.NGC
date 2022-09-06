@@ -1,0 +1,29 @@
+%
+#<h>=18 
+#<w>=40.5
+#<x0>=0
+#<y0>=0
+#<step>=[2*1.1811]
+#<search_feed>=15
+#<latch_feed>=1
+#<safe_z>=0.1
+#<search_z>=-0.1
+(PROBEOPEN PROBEDATA_20211126.txt)
+G0 Z[4*#<safe_z>]
+#<y>=#<y0>
+o101 while [#<y> LT #<h>+#<y0>]
+  #<x>=#<x0>
+  o102 while [#<x> LT #<w>+#<x0>]
+    G0 X#<x> Y#<y> 
+    F[#<search_feed>]
+    G38.2 Z#<search_z>
+    F[#<latch_feed>]
+    G38.4 Z#<safe_z>
+    G0 Z#<safe_z> 
+    #<x>=[#<x>+#<step>]
+  o102 endwhile
+  #<y>=[#<y>+#<step>]
+o101 endwhile
+(PROBECLOSE)
+M30
+%

@@ -1,0 +1,33 @@
+o<find_beam> sub
+ #<coord_system_was>=#<_coord_system>  (Save current coordinate system.)
+ #<wcs_y_varnumber> = [5202 + [20* #5220]] (5223 for G54, 5243 for G55, etc)
+ #<wcs_y> = #[#<wcs_y_varnumber>]
+ #<y_probe_dist> = 0.500
+ #<y_backoff_dist> = 0.050
+ #<probe_vel> = 2
+ #<search_vel> = 40
+
+ M70                                                                (Save modal state)
+ M5                                                                 (Turn spindle off)
+ M9                                                                 (Turn coolant off)
+ G17 G20 G40 G64 P0.001 G80 G94 G97 G98                             (Baseline modal state)
+ 
+ ;G59.3																		(Switch temporarily to G59.3 WCS for probing)
+ ;G10 L2 P9 X0 Y0 Z0															(Zero out work coordinate offsets in G59.3)
+ ;(msg,Note: Set coordinate system to G59.3)
+ 
+ M64 P2																		(Turn on optical sensor)
+ G38.2 G91 Y#<y_probe_dist> F#<probe_vel>									(Probe move to optical sensor)
+ #<y_beam_min> = [#5062 + #<wcs_y>]
+ G38.4 G91 Y#<y_probe_dist> F#<search_vel>
+ G1 G91 Y#<y_backoff_dist> F#<search_vel>
+ G38.2 Y[-1*#<y_probe_dist>] F#<probe_vel>
+ #<y_beam_max> = [#5062 + #<wcs_y>]
+ G38.5 Y[-1*#<y_probe_dist>] F#<search_vel>
+ G1 G91 Y[-1*#<y_backoff_dist>] F#<search_vel>
+ #<y_beam_mid> = [[#<y_beam_max> + #<y_beam_min>] / 2.0]
+ (debug,Success - optical beam midpoint at Y=#<y_beam_mid>)
+ (log,Success - optical beam midpoint at Y=#<y_beam_mid>)
+
+o<find_beam> endsub
+M2

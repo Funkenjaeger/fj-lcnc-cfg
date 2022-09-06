@@ -1,0 +1,30 @@
+%
+#<h>=8 
+#<w>=11
+#<x0>=0
+#<y0>=0
+#<xstep>=1
+#<ystep>=1
+#<search_feed>=15
+#<latch_feed>=1
+#<safe_z>=0.05
+#<search_z>=-0.1
+(PROBEOPEN PROBEDATA_PLATE.txt)
+G0 Z[4*#<safe_z>]
+#<y>=#<y0>
+o101 while [#<y> LE #<h>+#<y0>]
+  #<x>=#<x0>
+  o102 while [#<x> LE #<w>+#<x0>]
+    G0 X#<x> Y#<y> 
+    F[#<search_feed>]
+    G38.2 Z#<search_z>
+    F[#<latch_feed>]
+    G38.4 Z#<safe_z>
+    G0 Z#<safe_z> 
+    #<x>=[#<x>+#<xstep>]
+  o102 endwhile
+  #<y>=[#<y>+#<ystep>]
+o101 endwhile
+(PROBECLOSE)
+M30
+%

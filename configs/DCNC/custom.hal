@@ -1,0 +1,22 @@
+# Include your custom HAL commands here
+# This file will not be overwritten when you run PNCconf again
+
+#loadusr -W vfdmod vfdmod_config.ini
+
+# hook up to VFDMOD
+#net spindle-vel-cmd-rpm => vfdmod.spindle.rpm-in
+#net spindle-at-speed <= vfdmod.spindle.at-speed
+#net spindle-cw => vfdmod.control.run-forward
+#net spindle-ccw => vfdmod.control.run-reverse
+
+setp wj200-vfd-emd.0.mbslaveaddr 1 
+net spindle-at-speed	<=  wj200-vfd-emd.0.is-at-speed
+net spindle-run			=> 	wj200-vfd-emd.0.run
+net spindle-ccw 		=> 	wj200-vfd-emd.0.reverse
+net machine-is-enabled	=>	wj200-vfd-emd.0.enable
+net spindle-current		<=	wj200-vfd-emd.0.motor-current
+net spindle-fault		<=	wj200-vfd-emd.0.is-alarm
+
+### note 24000 RPM = 400 RPS, so 1 RPS = 1 Hz, no scale factor required
+net spindle-vel-cmd-rps-abs    <= wj200-vfd-emd.0.commanded-frequency
+net spindle-vel-fb-rps <= wj200-vfd-emd.0.actual-frequency

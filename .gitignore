@@ -1,0 +1,8 @@
+programs
+configs/DCNC/linuxcnc.var*
+configs/DCNC/tool.tbl
+*.log
+*.dat
+*.ignore
+*.halshow
+*.halscope

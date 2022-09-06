@@ -1,0 +1,135 @@
+o<toolchange> sub
+
+ M70                                                                (Save modal state)
+ M5                                                                 (Turn spindle off)
+ M9                                                                 (Turn coolant off)
+ G17 G20 G40 G64 P0.001 G80 G94 G97 G98                             (Baseline modal state)
+ 
+ #<rack_extended> = 0
+
+o500 if[#<_current_tool> EQ #<_selected_tool>]                     (Same tool as before so no need to do anything.)
+
+o500 else 
+	(This is a different tool.)
+	
+	o210 if [#<_hal[tool-change-mode]>]
+		; AUTOMATIC TOOL CHANGE
+		#<pocket_current_x> = [#<_ini[TOOL_CHANGE]POCKET_1_X> + [[#<_current_pocket> - 1] * #<_ini[TOOL_CHANGE]POCKET_DELTA_X>]]
+		#<pocket_selected_x> = [#<_ini[TOOL_CHANGE]POCKET_1_X> + [[#<_selected_pocket> - 1] * #<_ini[TOOL_CHANGE]POCKET_DELTA_X>]]
+		#<pocket_approach_y> = [#<_ini[TOOL_CHANGE]POCKET_Y> + #<_ini[TOOL_CHANGE]POCKET_SAFE_MOVE_Y>]
+		#<pocket_safe_z> = [#<_ini[TOOL_CHANGE]POCKET_Z> + #<_ini[TOOL_CHANGE]POCKET_SAFE_RETRACT_Z>]
+		
+		M66 P7 L0																			(Check air pressure sensor)
+		o216 if [#5399 EQ 0]
+			(abort,No air pressure)
+		o216 endif
+		
+		o211 if [#<_current_tool> NE 0]
+			M66 P[#<_current_pocket> - 1] L0												(Check tool pocket sensor)
+			o215 if [#5399 EQ 1]
+				(abort,Current pocket has a tool in it)
+			o215 endif
+		o211 endif
+		
+		o212 if [#<_selected_tool> NE 0]
+			M66 P[#<_selected_pocket> - 1] L0 												(Check tool pocket sensor)
+			o221 if [#5399 EQ 0]
+				(abort,Selected pocket has no tool in it)
+			o221 endif
+		o212 endif
+		
+		; Basic sanity checks done - start the tool change process		
+		G40
+		M64 P1				(Turn on spindle purge air)
+		
+		G90 G0                                                          (Absolute distance mode Rapid move)
+		G53 Z#<_ini[TOOLSENSOR]Z_SAFE>	   	 (Change Z Position)
+		
+		o213 if [#<_current_tool> NE 0]
+			G53 G0 X#<pocket_current_x> Y#<pocket_approach_y>								(Rapid XY to approach position for current tool's pocket)
+			M64 P4																			(Extend ATC tool rack)
+			G4 P#<_ini[TOOL_CHANGE]DWELL_TIME_RACK>											(Wait for ATC rack actuation)
+			#<rack_extended> = 1			
+			G53 G0 Z#<_ini[TOOL_CHANGE]POCKET_Z> 											(Rapid Z to pocket height)
+			G53 G1 Y#<_ini[TOOL_CHANGE]POCKET_Y> F#<_ini[TOOL_CHANGE]APPROACH_VELOCITY_Y>	(Slot tool into pocket)
+			M66 P[#<_current_pocket>-1] L0
+			o222 if [#5399 EQ 0]
+				M65 P4																		(Retract ATC tool rack)
+				(abort,Failed to deposit current tool)
+			o222 endif
+			M62 P0 																			(Release drawbar, synchronized with the following move)
+			G53 G0 Z[#<_ini[TOOL_CHANGE]POCKET_Z> + #<_ini[TOOL_CHANGE]DRAWBAR_OFFSET>]
+			G4 P#<_ini[TOOL_CHANGE]DWELL_TIME_DRAWBAR>										(Wait for drawbar release)
+			G53 G0 Z#<pocket_safe_z>														(Rapid Z to clear tool holders)
+			M66 P[#<_current_pocket>-1] L0
+			o313 if [#5399 EQ 0]
+				M65 P4																		(Retract ATC tool rack)
+				(abort,Tool not in pocket after Z retract)
+			o313 endif
+			M61 Q0																			(Set current tool to 0)
+		o213 endif
+		
+		o214 if [#<_selected_tool> NE 0]
+			M64 P0 																			(Release drawbar immediately)
+			G53 G0 Z#<pocket_safe_z>														(Rapid Z to clear tool holders)
+			G53 G0 X#<pocket_selected_x> Y#<_ini[TOOL_CHANGE]POCKET_Y>						(Rapid X over selected tool)
+			o314 if [#<rack_extended> EQ 0]
+				M64 P4																			(Extend ATC tool rack)
+				G4 P#<_ini[TOOL_CHANGE]DWELL_TIME_RACK>											(Wait for ATC rack actuation)
+				#<rack_extended> = 1
+			o314 endif
+			G53 G1 Z[[#<_ini[TOOL_CHANGE]POCKET_Z> + #<_ini[TOOL_CHANGE]DRAWBAR_OFFSET>]] F#<_ini[TOOL_CHANGE]APPROACH_VELOCITY_Z>	(Move Z onto selected tool)
+			M63 P0 																			(Engage drawbar, synchronized with the following move)
+			G53 G0 Z#<_ini[TOOL_CHANGE]POCKET_Z>
+			G4 P#<_ini[TOOL_CHANGE]DWELL_TIME_DRAWBAR>										(Wait for drawbar engagement)
+			G53 G1 Y#<pocket_approach_y> F#<_ini[TOOL_CHANGE]APPROACH_VELOCITY_Y>			(Slot tool out of pocket)
+			M65 P4																			(Retract ATC tool rack)
+			G4 P#<_ini[TOOL_CHANGE]DWELL_TIME_RACK>											(Wait for ATC rack actuation)
+			#<rack_extended> = 0
+			M66 P[#<_selected_pocket>-1] L0
+			o315 if [#5399 EQ 1]
+				(abort,Failed to remove selected tool from pocket)
+			o315 endif
+			G53 G0 Z0																		(Rapid retract Z)
+			M61 Q#<_selected_tool>															(Set current tool)
+		o214 else
+			M65 P0																			(Engage drawbar immediately)
+		o214 endif
+	o210 else
+		; MANUAL TOOL CHANGE		
+		G40
+		M64 P1				(Turn on spindle purge air)
+		
+		G90 G0															(Absolute distance mode Rapid move)
+		G53 Z#<_ini[TOOLSENSOR]Z_SAFE>									(Change Z Position)
+		
+		G59.3															(Switch temporarily to G59.3 WCS for probing)
+		G10 L2 P9 X0 Y0 Z0												(Zero out work coordinate offsets in G59.3)
+		
+		G53 X#<_ini[TOOL_CHANGE]MANUAL_CHANGE_LOC_X> Y#<_ini[TOOL_CHANGE]MANUAL_CHANGE_LOC_Y>   	 	(Move XY to manual change position)
+		M6 T#<_selected_tool>											(Do built-in M6 routine - pops up prompt)
+	o210 endif
+	
+	o217 if [#<rack_extended> NE 0]
+		M65 P4																			(Retract ATC tool rack)
+		G4 P#<_ini[TOOL_CHANGE]DWELL_TIME_RACK>											(Wait for ATC rack actuation)
+	o217 endif
+	
+	M65 P1		(Turn off spindle purge air)
+	
+ o220 if [#<_selected_tool> NE 0]
+  M201
+ o220 endif
+ 
+o500 endif
+
+M72                                                                	(Restore saved modal state)
+o501 if [EXISTS[#<_new_tlo>]]
+	G43.1 Z#<_new_tlo>													(Re-Set Dynamic TLO)
+o501 else
+	G43.1 Z0
+o501 endif
+
+o<toolchange> endsub
+M2
+

@@ -1,0 +1,45 @@
+# Include your custom_postgui HAL commands here
+# This file will not be overwritten when you run PNCconf again
+
+# loadrt or2
+addf or2.1 servo-thread
+
+net yl-home-sw => or2.1.in0
+net yr-home-sw => or2.1.in1
+#net x-home-sw	  =>  qtdragon.hal_led_home_x
+#net y-home-either or2.1.out	  =>  qtdragon.hal_led_home_y
+#net z-home-sw	  =>  qtdragon.hal_led_home_z
+
+net tool-pocket-sensor-1 => qtdragon.hal_led_pocket_1
+net tool-pocket-sensor-2 => qtdragon.hal_led_pocket_2
+net tool-pocket-sensor-3 => qtdragon.hal_led_pocket_3
+net tool-pocket-sensor-4 => qtdragon.hal_led_pocket_4
+net tool-pocket-sensor-5 => qtdragon.hal_led_pocket_5
+net tool-pocket-sensor-6 => qtdragon.hal_led_pocket_6
+
+net probe-in => qtdragon.hal_led_probe
+
+net tool-change-mode <= qtdragon.tool_change_mode_button
+
+# enable manual tool change prompt in qtdragon
+net tool-change      hal_manualtoolchange.change   <=  iocontrol.0.tool-change
+net tool-changed     hal_manualtoolchange.changed  <=  iocontrol.0.tool-changed
+net tool-prep-number hal_manualtoolchange.number   <=  iocontrol.0.tool-prep-number
+
+# enable probing features in qtdragon
+#net xwidth           motion.analog-out-00 => qtdragon.x_width
+#net ywidth           motion.analog-out-01 => qtdragon.y_width
+#net avg_dia          motion.analog-out-02 => qtdragon.avg_diameter
+#net edge_angle       motion.analog-out-03 => qtdragon.edge_angle
+#net edge_delta       motion.analog-out-04 => qtdragon.edge_delta
+#net xminus           motion.analog-out-05 => qtdragon.x_minus
+#net yminus           motion.analog-out-06 => qtdragon.y_minus
+#net zminus           motion.analog-out-07 => qtdragon.z_minus
+#net xplus            motion.analog-out-08 => qtdragon.x_plus
+#net yplus            motion.analog-out-09 => qtdragon.y_plus
+#net xcenter          motion.analog-out-10 => qtdragon.x_center
+#net ycenter          motion.analog-out-11 => qtdragon.y_center
+#net cal_offset       motion.analog-out-12 => qtdragon.cal_offset
+
+# spindle stuff
+net spindle-current	=> qtdragon.spindle-amps
