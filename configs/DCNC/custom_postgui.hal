@@ -19,6 +19,8 @@ net tool-pocket-sensor-6 => qtdragon.hal_led_pocket_6
 
 net probe-in => qtdragon.hal_led_probe
 
+net pressure-switch => qtdragon.hal_led_air_pressure
+
 net tool-change-mode <= qtdragon.tool_change_mode_button
 
 # enable manual tool change prompt in qtdragon
