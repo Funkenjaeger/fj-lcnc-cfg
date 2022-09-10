@@ -243,7 +243,7 @@
                <enum>QFrame::Raised</enum>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>3</number>
               </property>
               <widget class="QWidget" name="gcode_page">
                <property name="sizePolicy">
@@ -296,9 +296,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <family>Lato Heavy</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -345,9 +343,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <family>Lato</family>
                     <pointsize>10</pointsize>
-                    <weight>75</weight>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -685,7 +681,7 @@
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">:/images/images/tool_probe.png</pixmap>
+                   <pixmap resource="qtdragon.qrc">:/images/images/tool_probe.png</pixmap>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -1665,7 +1661,7 @@ SENSOR</string>
                  </spacer>
                 </item>
                 <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_28">
+                 <layout class="QVBoxLayout" name="verticalLayout_28">
                   <property name="spacing">
                    <number>4</number>
                   </property>
@@ -1678,10 +1674,35 @@ SENSOR</string>
                      <string/>
                     </property>
                     <property name="pixmap">
-                     <pixmap resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">:/images/images/atc_spindle_tool.png</pixmap>
+                     <pixmap resource="qtdragon.qrc">:/images/images/atc_spindle_tool.png</pixmap>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item alignment="Qt::AlignHCenter">
+                   <widget class="QLabel" name="label_50">
+                    <property name="minimumSize">
+                     <size>
+                      <width>420</width>
+                      <height>78</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>420</width>
+                      <height>78</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="pixmap">
+                     <pixmap resource="qtdragon.qrc">:/images/images/touch_plate.png</pixmap>
+                    </property>
+                    <property name="scaledContents">
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </item>
@@ -1977,6 +1998,38 @@ SENSOR</string>
                   </layout>
                  </widget>
                 </item>
+                <item alignment="Qt::AlignHCenter">
+                 <widget class="QPushButton" name="btn_touchplate">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>80</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="statusTip">
+                   <string>TOUCHOFF TO TOOL TOUCHPLATE</string>
+                  </property>
+                  <property name="text">
+                   <string>TOUCH
+PLATE</string>
+                  </property>
+                  <property name="sensor" stdset="0">
+                   <string>_touchplate_</string>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <spacer name="verticalSpacer_9">
                   <property name="orientation">
@@ -1992,7 +2045,7 @@ SENSOR</string>
                 </item>
                 <item>
                  <widget class="QWidget" name="widget_tool_table" native="true">
-                  <layout class="QHBoxLayout" name="horizontalLayout_50">
+                  <layout class="QHBoxLayout" name="horizontalLayout_12">
                    <property name="spacing">
                     <number>4</number>
                    </property>
@@ -2032,7 +2085,8 @@ SENSOR</string>
                       <string>Add new tool to tooltable</string>
                      </property>
                      <property name="text">
-                      <string>ADD</string>
+                      <string>ADD
+TOOL</string>
                      </property>
                      <property name="python_command_option" stdset="0">
                       <bool>true</bool>
@@ -2069,7 +2123,8 @@ SENSOR</string>
                       <string>Delete selected tools</string>
                      </property>
                      <property name="text">
-                      <string>DELETE</string>
+                      <string>DELETE
+TOOL</string>
                      </property>
                      <property name="python_command_option" stdset="0">
                       <bool>true</bool>
@@ -2085,7 +2140,7 @@ SENSOR</string>
                    <item>
                     <widget class="QPushButton" name="btn_m61">
                      <property name="enabled">
-                      <bool>false</bool>
+                      <bool>true</bool>
                      </property>
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2095,13 +2150,13 @@ SENSOR</string>
                      </property>
                      <property name="minimumSize">
                       <size>
-                       <width>80</width>
+                       <width>100</width>
                        <height>50</height>
                       </size>
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>80</width>
+                       <width>100</width>
                        <height>50</height>
                       </size>
                      </property>
@@ -2109,12 +2164,16 @@ SENSOR</string>
                       <string>Load selected tool</string>
                      </property>
                      <property name="text">
-                      <string>M61 Qn</string>
+                      <string>SET TOOL
+(M61 Q#)</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="btn_touchplate">
+                    <widget class="QPushButton" name="btn_m6">
+                     <property name="enabled">
+                      <bool>true</bool>
+                     </property>
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                        <horstretch>0</horstretch>
@@ -2123,25 +2182,22 @@ SENSOR</string>
                      </property>
                      <property name="minimumSize">
                       <size>
-                       <width>80</width>
+                       <width>100</width>
                        <height>50</height>
                       </size>
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>80</width>
+                       <width>100</width>
                        <height>50</height>
                       </size>
                      </property>
-                     <property name="statusTip">
-                      <string>TOUCHOFF TO TOOL TOUCHPLATE</string>
+                     <property name="toolTip">
+                      <string>Load selected tool</string>
                      </property>
                      <property name="text">
-                      <string>TOUCH
-PLATE</string>
-                     </property>
-                     <property name="sensor" stdset="0">
-                      <string>_touchplate_</string>
+                      <string>CHANGE TOOL
+(T# M6)</string>
                      </property>
                     </widget>
                    </item>
@@ -4855,7 +4911,7 @@ FILE</string>
                              <string/>
                             </property>
                             <property name="icon">
-                             <iconset resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">
+                             <iconset resource="qtdragon.qrc">
                               <normaloff>:/buttons/images/Right_arrow.png</normaloff>:/buttons/images/Right_arrow.png</iconset>
                             </property>
                             <property name="iconSize">
@@ -4893,7 +4949,7 @@ FILE</string>
                              <string/>
                             </property>
                             <property name="icon">
-                             <iconset resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">
+                             <iconset resource="qtdragon.qrc">
                               <normaloff>:/buttons/images/Left_arrow.png</normaloff>:/buttons/images/Left_arrow.png</iconset>
                             </property>
                             <property name="iconSize">
@@ -7054,7 +7110,7 @@ TO FILE</string>
                            <string/>
                           </property>
                           <property name="pixmap">
-                           <pixmap resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">:/images/images/D_logo_tight.svg</pixmap>
+                           <pixmap resource="qtdragon.qrc">:/images/images/D_logo_tight.svg</pixmap>
                           </property>
                           <property name="scaledContents">
                            <bool>true</bool>
@@ -7809,7 +7865,7 @@ TO FILE</string>
                           <string/>
                          </property>
                          <property name="icon">
-                          <iconset resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">
+                          <iconset resource="qtdragon.qrc">
                            <normaloff>:/buttons/images/a_plus_jog_button.png</normaloff>:/buttons/images/a_plus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
@@ -7853,7 +7909,7 @@ TO FILE</string>
                           <string/>
                          </property>
                          <property name="icon">
-                          <iconset resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">
+                          <iconset resource="qtdragon.qrc">
                            <normaloff>:/buttons/images/y_minus_jog_button.png</normaloff>:/buttons/images/y_minus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
@@ -7946,7 +8002,7 @@ TO FILE</string>
                           <string/>
                          </property>
                          <property name="icon">
-                          <iconset resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">
+                          <iconset resource="qtdragon.qrc">
                            <normaloff>:/buttons/images/z_plus_jog_button.png</normaloff>:/buttons/images/z_plus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
@@ -7990,7 +8046,7 @@ TO FILE</string>
                           <string/>
                          </property>
                          <property name="icon">
-                          <iconset resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">
+                          <iconset resource="qtdragon.qrc">
                            <normaloff>:/buttons/images/x_minus_jog_button.png</normaloff>:/buttons/images/x_minus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
@@ -8070,7 +8126,7 @@ TO FILE</string>
                           <string/>
                          </property>
                          <property name="icon">
-                          <iconset resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">
+                          <iconset resource="qtdragon.qrc">
                            <normaloff>:/buttons/images/x_plus_jog_button.png</normaloff>:/buttons/images/x_plus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
@@ -8157,7 +8213,7 @@ TO FILE</string>
                           <string/>
                          </property>
                          <property name="icon">
-                          <iconset resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">
+                          <iconset resource="qtdragon.qrc">
                            <normaloff>:/buttons/images/a_minus_jog_button.png</normaloff>:/buttons/images/a_minus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
@@ -8198,7 +8254,7 @@ TO FILE</string>
                           <string/>
                          </property>
                          <property name="icon">
-                          <iconset resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">
+                          <iconset resource="qtdragon.qrc">
                            <normaloff>:/buttons/images/z_minus_jog_button.png</normaloff>:/buttons/images/z_minus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
@@ -8236,7 +8292,7 @@ TO FILE</string>
                           <string/>
                          </property>
                          <property name="icon">
-                          <iconset resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">
+                          <iconset resource="qtdragon.qrc">
                            <normaloff>:/buttons/images/y_plus_jog_button.png</normaloff>:/buttons/images/y_plus_jog_button.png</iconset>
                          </property>
                          <property name="iconSize">
@@ -9898,8 +9954,6 @@ SPINDLE</string>
                  </property>
                  <property name="font">
                   <font>
-                   <family>Lato</family>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -9989,7 +10043,7 @@ SPINDLE</string>
                   <string/>
                  </property>
                  <property name="pixmap">
-                  <pixmap resource="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc">:/images/images/atc_spindle_tool.png</pixmap>
+                  <pixmap resource="qtdragon.qrc">:/images/images/atc_spindle_tool.png</pixmap>
                  </property>
                  <property name="scaledContents">
                   <bool>false</bool>
@@ -13919,13 +13973,6 @@ ZERO</string>
                  <property name="text">
                   <string>REV</string>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normalon>//dudzik_nas/cnc/home/marko/.designer/backup/images/spindle_rev.png</normalon>
-                   <activeon>//dudzik_nas/cnc/home/marko/.designer/backup/images/spindle_rev.png</activeon>
-                   <selectedon>//dudzik_nas/cnc/home/marko/.designer/backup/images/spindle_rev.png</selectedon>
-                  </iconset>
-                 </property>
                  <property name="iconSize">
                   <size>
                    <width>20</width>
@@ -14133,13 +14180,6 @@ ZERO</string>
                  <property name="text">
                   <string>FWD</string>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normalon>//dudzik_nas/cnc/home/marko/.designer/backup/images/spindle_fwd.png</normalon>
-                   <activeon>//dudzik_nas/cnc/home/marko/.designer/backup/images/spindle_fwd.png</activeon>
-                   <selectedon>//dudzik_nas/cnc/home/marko/.designer/backup/images/spindle_fwd.png</selectedon>
-                  </iconset>
-                 </property>
                  <property name="iconSize">
                   <size>
                    <width>20</width>
@@ -14346,11 +14386,6 @@ ZERO</string>
                  </property>
                  <property name="text">
                   <string>Stop</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <selectedon>//dudzik_nas/cnc/home/marko/.designer/backup/images/spindle_stop.png</selectedon>
-                  </iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -15397,7 +15432,22 @@ TOOL CHANGE</string>
             </item>
             <item>
              <widget class="QWidget" name="widget_3" native="true">
-              <layout class="QHBoxLayout" name="horizontalLayout_44">
+              <layout class="QHBoxLayout" name="horizontalLayout_28">
+               <property name="spacing">
+                <number>4</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
                <item>
                 <widget class="QWidget" name="widget_homes" native="true">
                  <layout class="QVBoxLayout" name="verticalLayout_23">
@@ -15721,6 +15771,94 @@ TOOL CHANGE</string>
                      <color>
                       <red>0</red>
                       <green>255</green>
+                      <blue>0</blue>
+                     </color>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QWidget" name="widget_air_pressure" native="true">
+                 <layout class="QVBoxLayout" name="verticalLayout_33">
+                  <property name="spacing">
+                   <number>4</number>
+                  </property>
+                  <property name="leftMargin">
+                   <number>4</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>4</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QLabel" name="label_53">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>44</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>44</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>AIR</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item alignment="Qt::AlignHCenter">
+                   <widget class="LED" name="hal_led_air_pressure" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>16</width>
+                      <height>16</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16</width>
+                      <height>16</height>
+                     </size>
+                    </property>
+                    <property name="diameter" stdset="0">
+                     <number>25</number>
+                    </property>
+                    <property name="color" stdset="0">
+                     <color>
+                      <red>0</red>
+                      <green>255</green>
+                      <blue>0</blue>
+                     </color>
+                    </property>
+                    <property name="off_color" stdset="0">
+                     <color>
+                      <red>255</red>
+                      <green>0</green>
                       <blue>0</blue>
                      </color>
                     </property>
@@ -16173,10 +16311,7 @@ TOOL CHANGE</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc"/>
-  <include location="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc"/>
-  <include location="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc"/>
-  <include location="//dudzik_nas/cnc/20220615_qtdragon_upgrade/qtvcp_new/screens/qtdragon/qtdragon.qrc"/>
+  <include location="qtdragon.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -16851,6 +16986,22 @@ TOOL CHANGE</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btn_m6</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>btn_m6_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>357</x>
+     <y>712</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>799</x>
+     <y>580</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <designerdata>
   <property name="gridDeltaX">
@@ -16881,6 +17032,7 @@ TOOL CHANGE</string>
   <slot>btn_add_tool_clicked()</slot>
   <slot>btn_delete_tool_clicked()</slot>
   <slot>btn_m61_clicked()</slot>
+  <slot>btn_m6_clicked()</slot>
   <slot>alarm_added()</slot>
   <slot>tab_changed(int)</slot>
   <slot>btn_clear_status_clicked()</slot>
@@ -16926,7 +17078,7 @@ TOOL CHANGE</string>
   <slot>tab_utilities_changed()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="mode_buttonGroup"/>
   <buttongroup name="page_buttonGroup"/>
+  <buttongroup name="mode_buttonGroup"/>
  </buttongroups>
 </ui>
