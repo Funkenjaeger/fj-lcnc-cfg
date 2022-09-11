@@ -54,7 +54,7 @@ notify_start_timeout = 1
 [BOOK_KEEPING]
 last_loaded_directory = /home/evand/linuxcnc/nc_files
 last_loaded_file = /home/evand/linuxcnc/nc_files/toolchange.ngc
-style_QSS_Path = /usr/share/qtvcp/screens/qtdragon/argentium.qss
+style_QSS_Path = /home/evand/linuxcnc/configs/DCNC/qtdragon/argentium.qss
 RecentPath_0 = /mnt/cnc/nc_files/Top Half_V-carve top half v1.ngc
 
 [PROBE OPTIONS]
