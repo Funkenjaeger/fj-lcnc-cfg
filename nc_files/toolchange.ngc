@@ -1,5 +1,5 @@
 o<toolchange> sub
-
+o999 if[#<_task> NE 0]
  M70                                                                (Save modal state)
  M5                                                                 (Turn spindle off)
  M9                                                                 (Turn coolant off)
@@ -130,6 +130,6 @@ o501 else
 	G43.1 Z0
 o501 endif
 
+o999 endif
 o<toolchange> endsub
 M2
-
