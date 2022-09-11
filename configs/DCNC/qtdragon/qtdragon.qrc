@@ -21,5 +21,6 @@
     <file>images/silver_dragon.png</file>
     <file>images/tool_probe.png</file>
     <file>images/D_logo_tight.svg</file>
+    <file>images/touch_plate.png</file>
   </qresource>
 </RCC>

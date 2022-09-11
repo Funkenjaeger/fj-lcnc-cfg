@@ -6,3 +6,9 @@ configs/DCNC/tool.tbl
 *.ignore
 *.halshow
 *.halscope
+
+*.pyc
+
+*.bak
+
+*.var

@@ -782,6 +782,16 @@ class HandlerClass:
             ACTION.CALL_MDI("M61 Q{} G43".format(checked[0]))
         else:
             self.add_status("No tool selected", CRITICAL)
+            
+    def btn_m6_clicked(self):
+        checked = self.w.tooloffsetview.get_checked_list()
+        if len(checked) > 1:
+            self.add_status("Select only 1 tool to load", WARNING)
+        elif checked:
+            self.add_status("Changing to tool {}".format(checked[0]))
+            ACTION.CALL_MDI("T{} M6".format(checked[0]))
+        else:
+            self.add_status("No tool selected", CRITICAL)
 
     def btn_touchoff_clicked(self):
         if STATUS.get_current_tool() == 0:
