@@ -8,3 +8,7 @@ configs/DCNC/tool.tbl
 *.halscope
 
 *.pyc
+
+*.bak
+
+*.var
