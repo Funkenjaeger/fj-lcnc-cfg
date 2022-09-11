@@ -1645,6 +1645,88 @@ SENSOR</string>
                  </layout>
                 </item>
                 <item>
+                 <widget class="QWidget" name="widget_4" native="true">
+                  <layout class="QHBoxLayout" name="horizontalLayout_44">
+                   <item>
+                    <widget class="IndicatedPushButton" name="btn_tool_add">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>80</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>80</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Add new tool to tooltable</string>
+                     </property>
+                     <property name="text">
+                      <string>ADD
+TOOL</string>
+                     </property>
+                     <property name="python_command_option" stdset="0">
+                      <bool>true</bool>
+                     </property>
+                     <property name="true_python_cmd_string" stdset="0">
+                      <string>INSTANCE.tooloffsetview.add_tool()</string>
+                     </property>
+                     <property name="false_python_cmd_string" stdset="0">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="IndicatedPushButton" name="btn_tool_delete">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>80</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>80</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Delete selected tools</string>
+                     </property>
+                     <property name="text">
+                      <string>DELETE
+TOOL</string>
+                     </property>
+                     <property name="python_command_option" stdset="0">
+                      <bool>true</bool>
+                     </property>
+                     <property name="true_python_cmd_string" stdset="0">
+                      <string>INSTANCE.tooloffsetview.delete_tools()</string>
+                     </property>
+                     <property name="false_python_cmd_string" stdset="0">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
                  <spacer name="verticalSpacer_29">
                   <property name="orientation">
                    <enum>Qt::Vertical</enum>
@@ -2008,13 +2090,13 @@ SENSOR</string>
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>80</width>
+                    <width>100</width>
                     <height>50</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>80</width>
+                    <width>100</width>
                     <height>50</height>
                    </size>
                   </property>
@@ -2022,8 +2104,7 @@ SENSOR</string>
                    <string>TOUCHOFF TO TOOL TOUCHPLATE</string>
                   </property>
                   <property name="text">
-                   <string>TOUCH
-PLATE</string>
+                   <string>TOUCH PLATE</string>
                   </property>
                   <property name="sensor" stdset="0">
                    <string>_touchplate_</string>
@@ -2045,100 +2126,9 @@ PLATE</string>
                 </item>
                 <item>
                  <widget class="QWidget" name="widget_tool_table" native="true">
-                  <layout class="QHBoxLayout" name="horizontalLayout_12">
-                   <property name="spacing">
-                    <number>4</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="IndicatedPushButton" name="btn_tool_add">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="minimumSize">
-                      <size>
-                       <width>80</width>
-                       <height>50</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>80</width>
-                       <height>50</height>
-                      </size>
-                     </property>
-                     <property name="toolTip">
-                      <string>Add new tool to tooltable</string>
-                     </property>
-                     <property name="text">
-                      <string>ADD
-TOOL</string>
-                     </property>
-                     <property name="python_command_option" stdset="0">
-                      <bool>true</bool>
-                     </property>
-                     <property name="true_python_cmd_string" stdset="0">
-                      <string>INSTANCE.tooloffsetview.add_tool()</string>
-                     </property>
-                     <property name="false_python_cmd_string" stdset="0">
-                      <string/>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="IndicatedPushButton" name="btn_tool_delete">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="minimumSize">
-                      <size>
-                       <width>80</width>
-                       <height>50</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>80</width>
-                       <height>50</height>
-                      </size>
-                     </property>
-                     <property name="toolTip">
-                      <string>Delete selected tools</string>
-                     </property>
-                     <property name="text">
-                      <string>DELETE
-TOOL</string>
-                     </property>
-                     <property name="python_command_option" stdset="0">
-                      <bool>true</bool>
-                     </property>
-                     <property name="true_python_cmd_string" stdset="0">
-                      <string>INSTANCE.tooloffsetview.delete_tools()</string>
-                     </property>
-                     <property name="false_python_cmd_string" stdset="0">
-                      <string/>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="btn_m61">
+                  <layout class="QGridLayout" name="gridLayout_3">
+                   <item row="0" column="4">
+                    <widget class="QPushButton" name="btn_unload_tool">
                      <property name="enabled">
                       <bool>true</bool>
                      </property>
@@ -2164,12 +2154,12 @@ TOOL</string>
                       <string>Load selected tool</string>
                      </property>
                      <property name="text">
-                      <string>SET TOOL
-(M61 Q#)</string>
+                      <string>UNLOAD TOOL
+(T0 M6)</string>
                      </property>
                     </widget>
                    </item>
-                   <item>
+                   <item row="0" column="3">
                     <widget class="QPushButton" name="btn_m6">
                      <property name="enabled">
                       <bool>true</bool>
@@ -2198,6 +2188,38 @@ TOOL</string>
                      <property name="text">
                       <string>CHANGE TOOL
 (T# M6)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="QPushButton" name="btn_m61">
+                     <property name="enabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Load selected tool</string>
+                     </property>
+                     <property name="text">
+                      <string>SET TOOL
+(M61 Q#)</string>
                      </property>
                     </widget>
                    </item>
@@ -17002,6 +17024,22 @@ TOOL CHANGE</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btn_unload_tool</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>btn_unload_tool_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>338</x>
+     <y>736</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>799</x>
+     <y>580</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <designerdata>
   <property name="gridDeltaX">
@@ -17033,6 +17071,7 @@ TOOL CHANGE</string>
   <slot>btn_delete_tool_clicked()</slot>
   <slot>btn_m61_clicked()</slot>
   <slot>btn_m6_clicked()</slot>
+  <slot>btn_unload_tool_clicked()</slot>
   <slot>alarm_added()</slot>
   <slot>tab_changed(int)</slot>
   <slot>btn_clear_status_clicked()</slot>

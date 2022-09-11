@@ -792,6 +792,10 @@ class HandlerClass:
             ACTION.CALL_MDI("T{} M6".format(checked[0]))
         else:
             self.add_status("No tool selected", CRITICAL)
+            
+    def btn_unload_tool_clicked(self):
+        self.add_status("Unloading tool")
+        ACTION.CALL_MDI("T0 M6")
 
     def btn_touchoff_clicked(self):
         if STATUS.get_current_tool() == 0:
