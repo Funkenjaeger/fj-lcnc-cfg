@@ -41,3 +41,11 @@ The following are key details about my CNC machine, to give context to this over
         * TLO is independent of active work coordinate offsets (e.g. G54)
 * Hitachi WJ200 VFD controlled via Modbus using USB-RS485 adapter 
 * iMach P4S pendant
+
+## qtdragon gui
+I started with the stock qtdragon UI and made a few changes:
+* Resized to best fit my 1600x1200 display
+* Added some indicators & controls in the lower right for tool changer-related items (tool pocket sensors, compressed air pressure sensor, auto/manual tool change mode)
+* Added some ATC-related buttons to the left pane of the tool tab
+![Screenshot_2022-09-11_20-58-16](https://user-images.githubusercontent.com/24237058/189557962-51730797-63c3-47d1-a49a-d7392fb95c13.png)
+
