@@ -1,6 +1,7 @@
 programs
 configs/DCNC/linuxcnc.var*
-configs/DCNC/tool.tbl
+tool.tbl
+halshow.preferences
 *.log
 *.dat
 *.ignore
@@ -12,3 +13,5 @@ configs/DCNC/tool.tbl
 *.bak
 
 *.var
+
+qtdragon.ui.*
