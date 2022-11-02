@@ -9,7 +9,7 @@ loadrt hostmot2
 loadrt hm2_eth board_ip="10.10.10.10" config="num_encoders=0 num_pwmgens=0 num_stepgens=4 sserial_port_0=0000xx" 
 setp   hm2_7i93.0.watchdog.timeout_ns 5000000
 loadrt pid names=pid.x,pid.yl,pid.yr,pid.z,pid.s
-loadrt debounce cfg=2
+loadrt debounce cfg=3
 addf debounce.0    servo-thread
 # debounce delay LSB = ticks of servo-thread, i.e. 1ms
 setp debounce.0.delay 20
@@ -23,6 +23,7 @@ addf not.0 servo-thread
 loadrt estop_latch
 addf estop-latch.0 servo-thread
 loadusr wj200_vfd_emd --device /dev/ttyUSB0
+loadusr aircompressor
 
 addf hm2_7i93.0.read          servo-thread
 addf motion-command-handler   servo-thread
@@ -109,8 +110,8 @@ setp hm2_7i93.0.stepgen.timer-number 1
 # hm2_7i93.0.gpio.035  this                   IN    EMD        yl_home_sw
 # hm2_7i93.0.gpio.036  this                   IN    EMD        yr_home_sw
 # hm2_7i93.0.gpio.037  this                   IN    EMD        z_home_sw
-# hm2_7i93.0.gpio.038  this                   IN    EMD        probe-raw
-# hm2_7i93.0.gpio.039  -                      -     EMD        Not used (is PROBE2)
+# hm2_7i93.0.gpio.038  this                   IN    EMD        probeNO-raw (PROBE1 - Normally Open)
+# hm2_7i93.0.gpio.039  this                   IN    EMD        probeNC-raw (PROBE2 - Normally Closed)
 # hm2_7i93.0.gpio.040  this                   IN    EMD        toolsetter-raw
 # hm2_7i93.0.gpio.041  this                   IN    EMD        toolsetter-overtravel
 # hm2_7i93.0.gpio.042  -                      -     EMD        Not used (is FEEDHOLD)
@@ -407,23 +408,23 @@ net coolant-flood     <=  iocontrol.0.coolant-flood
 
 #  ---probe signal---
 
-#setp debounce.0.0.in 0
-net probe-raw debounce.0.0.in <= hm2_7i93.0.gpio.038.in_not
+net probeNO-raw debounce.0.0.in <= hm2_7i93.0.gpio.038.in
+net toolsetter-raw debounce.0.1.in <= hm2_7i93.0.gpio.040.in_not
+net probeNC-raw debounce.0.2.in <= hm2_7i93.0.gpio.039.in_not
 net probe-in    =>  motion.probe-input
-# net probe-in	<=  debounce.0.0.out
+
 # lut5.0 function = 5-input OR
 setp lut5.0.function 0xfffffffe
-net probe-debounced lut5.0.in-0 <= debounce.0.0.out
+net probeNO-debounced lut5.0.in-0 <= debounce.0.0.out
 net toolsetter-debounced lut5.0.in-1 <= debounce.0.1.out
 net optical-in lut5.0.in-2 <= hm2_7i93.0.gpio.006.in_not
+net probeNC-debounced lut5.0.in-3 <= debounce.0.2.out
 net optical-in => motion.digital-in-06
-setp lut5.0.in-3 0
 setp lut5.0.in-4 0
 net probe-in <= lut5.0.out
-net toolsetter-raw debounce.0.1.in <= hm2_7i93.0.gpio.040.in_not
 net optical-enable <= motion.digital-out-02
 net optical-enable => hm2_7i93.0.gpio.018.out
-setp hm2_7i93.0.gpio.018.invert_output TRUE
+setp hm2_7i93.0.gpio.018.invert_output FALSE
 setp hm2_7i93.0.gpio.018.is_output TRUE
 
 
@@ -462,19 +463,19 @@ net tool-prepare-loopback   iocontrol.0.tool-prepare      =>  iocontrol.0.tool-p
 net atc-drawbar <= motion.digital-out-00
 net atc-purge	<= motion.digital-out-01
 net atc-drawbar => hm2_7i93.0.gpio.016.out
-setp hm2_7i93.0.gpio.016.invert_output TRUE
+setp hm2_7i93.0.gpio.016.invert_output FALSE
 setp hm2_7i93.0.gpio.016.is_output TRUE
 net atc-purge 	=> hm2_7i93.0.gpio.017.out
-setp hm2_7i93.0.gpio.017.invert_output TRUE
+setp hm2_7i93.0.gpio.017.invert_output FALSE
 setp hm2_7i93.0.gpio.017.is_output TRUE
 net toolholder-sensed <= motion.digital-out-03
-net tool-pocket-sensor-1 motion.digital-in-00 <= hm2_7i93.0.gpio.005.in_not
-net tool-pocket-sensor-2 motion.digital-in-01 <= hm2_7i93.0.gpio.004.in_not
-net tool-pocket-sensor-3 motion.digital-in-02 <= hm2_7i93.0.gpio.003.in_not
-net tool-pocket-sensor-4 motion.digital-in-03 <= hm2_7i93.0.gpio.002.in_not
-net tool-pocket-sensor-5 motion.digital-in-04 <= hm2_7i93.0.gpio.001.in_not
-net tool-pocket-sensor-6 motion.digital-in-05 <= hm2_7i93.0.gpio.000.in_not
+net tool-pocket-sensor-1 motion.digital-in-00 <= hm2_7i93.0.gpio.005.in
+net tool-pocket-sensor-2 motion.digital-in-01 <= hm2_7i93.0.gpio.004.in
+net tool-pocket-sensor-3 motion.digital-in-02 <= hm2_7i93.0.gpio.003.in
+net tool-pocket-sensor-4 motion.digital-in-03 <= hm2_7i93.0.gpio.002.in
+net tool-pocket-sensor-5 motion.digital-in-04 <= hm2_7i93.0.gpio.001.in
+net tool-pocket-sensor-6 motion.digital-in-05 <= hm2_7i93.0.gpio.000.in
 net atc-rack-actuator motion.digital-out-04 => hm2_7i93.0.gpio.019.out
-setp hm2_7i93.0.gpio.019.invert_output TRUE
+setp hm2_7i93.0.gpio.019.invert_output FALSE
 setp hm2_7i93.0.gpio.019.is_output TRUE
 net pressure-switch motion.digital-in-07 <= hm2_7i93.0.gpio.007.in_not

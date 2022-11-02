@@ -52,15 +52,18 @@ o500 else
 			#<rack_extended> = 1			
 			G53 G0 Z#<_ini[TOOL_CHANGE]POCKET_Z> 											(Rapid Z to pocket height)
 			G53 G1 Y#<_ini[TOOL_CHANGE]POCKET_Y> F#<_ini[TOOL_CHANGE]APPROACH_VELOCITY_Y>	(Slot tool into pocket)
+			G4 P0.1
 			M66 P[#<_current_pocket>-1] L0
 			o222 if [#5399 EQ 0]
 				M65 P4																		(Retract ATC tool rack)
+				G4 P0.1
 				(abort,Failed to deposit current tool)
 			o222 endif
 			M62 P0 																			(Release drawbar, synchronized with the following move)
 			G53 G0 Z[#<_ini[TOOL_CHANGE]POCKET_Z> + #<_ini[TOOL_CHANGE]DRAWBAR_OFFSET>]
 			G4 P#<_ini[TOOL_CHANGE]DWELL_TIME_DRAWBAR>										(Wait for drawbar release)
 			G53 G0 Z#<pocket_safe_z>														(Rapid Z to clear tool holders)
+			G4 P0.1
 			M66 P[#<_current_pocket>-1] L0
 			o313 if [#5399 EQ 0]
 				M65 P4																		(Retract ATC tool rack)
