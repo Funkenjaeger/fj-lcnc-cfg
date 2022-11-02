@@ -9,6 +9,7 @@ What's included:
   * Automatic tool changes with actuated linear tool rack
   * Tool length measurement with tool setter
 * Modifications to the qtdragon UI
+* HAL components for VFD and air compressor control
 
 ## Configuration Description
 The following are key details about my CNC machine, to give context to this overall configuration.
@@ -29,8 +30,9 @@ The following are key details about my CNC machine, to give context to this over
     * Custom breakout board interfaces Clearpath servos, limit switches, hardware E-stops, probes, tool setter, and miscellaneous other I/O
     * 7i37-COM I/O card for additional I/O (e.g. Solenoid valves for ATC spindle)
     * Modified HOSTMOT2 FW to support these breakout boards
-* Touch plate (electrical continuity type) for zeroing Z work coordinate to the workpiece
-* 3D touch probe for other probing operations
+* Dual probe inputs:
+    * Touch plate (electrical continuity type) for zeroing Z work coordinate to the workpiece (Normally Open)
+    * 3D touch probe for other probing operations (Normally Closed)
 * ATC spindle and linear tool rack (oriented along X axis) - the rack is actuated with air cylinders, extending for tool changes and retracting out of the way otherwise
 * M6 remapped for both manual and automatic tool changes, with automatic tool length offset using tool setter.  This was achieved using an NGC script as the top-level remap, which calls custom M-code (M102) which invokes a python script when necessary to generate a user prompt.  A button on the GUI toggles between manual and automatic tool changes.
     * In Manual tool change mode, the machine moves to a convenient location and prompts the user to change the tool.  
@@ -41,6 +43,7 @@ The following are key details about my CNC machine, to give context to this over
         * TLO is independent of active work coordinate offsets (e.g. G54)
 * Hitachi WJ200 VFD controlled via Modbus using USB-RS485 adapter 
 * iMach P4S pendant
+* Automatically turn on air compressor (MQTT via Adafruit.io, custom ESP32-based hardware controls compressor)
 
 ## qtdragon gui
 I started with the stock qtdragon UI and made a few changes:

@@ -1,0 +1,54 @@
+#!/usr/bin/python3
+import hal, time, sys, os
+import linuxcnc
+from Adafruit_IO import MQTTClient
+
+#Note: User needs to set these environment variables with the corresponding secrets
+ADAFRUIT_IO_USERNAME = os.environ.get('ADAFRUIT_IO_USERNAME')
+ADAFRUIT_IO_KEY = os.environ.get('ADAFRUIT_IO_KEY')
+
+FEED_ID_T_REM = 'compressor-time-remaining'
+FEED_ID_CTRL = 'compressor-control'
+
+t_rem = 0
+
+def connected(client):
+    client.subscribe(FEED_ID_T_REM)
+
+def message(client, feed_id, payload):
+    global t_rem
+    if feed_id == FEED_ID_T_REM:
+        t_rem = int(payload)
+        h['time_remaining'] = t_rem
+
+def subscribe(client, userdata, mid, granted_qos):
+    pass
+
+if ADAFRUIT_IO_USERNAME and ADAFRUIT_IO_KEY:
+    print('Connecting to Adafruit.io as {0} with key {1}'.format(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY))
+    client = MQTTClient(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY)
+
+    client.on_connect = connected
+    client.on_message = message
+    client.on_subscribe  = subscribe
+
+    client.connect()
+    client.loop_background()
+
+    h = hal.component("aircompressor")
+    h.newpin("time_remaining", hal.HAL_FLOAT, hal.HAL_OUT)
+    h.ready()
+    foo = 0
+    try:
+        s = linuxcnc.stat()
+        while True:
+            time.sleep(5)
+            s.poll()
+            enabled = getattr(s,'enabled')
+            if enabled and t_rem < 10:
+                print('Turning on air compressor...')
+                client.publish(FEED_ID_CTRL, 'ON')
+    except KeyboardInterrupt:
+        raise SystemExit
+else:
+    print('Adafruit.io credentials not set in environment variables, unable to connect')
