@@ -47,11 +47,14 @@ setp hm2_7i93.0.stepgen.timer-number 1
 # motion.digital-in-05  this               tool-pocket-sensor-6
 # motion.digital-in-06  this               optical-in
 # motion.digital-in-07  this               pressure-switch
+# motion.digital-in-08  this               dust-shoe-retracted
 # motion.digital-out-00 this               atc_drawbar
 # motion.digital-out-01 this               atc_purge
 # motion.digital-out-02 this               optical-enable
 # motion.digital-out-03 this               result of toolholder check
 # motion.digital-out-04 this               ATC rack actuator
+# motion.digital-out-05 this               dust-shoe-cylinder-extend
+# motion.digital-out-06 this               dust-shoe-cylinder-swing
 # motion.analog-out-00  custom_postgui.hal qtdragon probing stuff
 # motion.analog-out-01  custom_postgui.hal qtdragon probing stuff
 # motion.analog-out-02  custom_postgui.hal qtdragon probing stuff
@@ -84,7 +87,7 @@ setp hm2_7i93.0.stepgen.timer-number 1
 # hm2_7i93.0.gpio.005  this                   IN    7i37-IN5   tool-pocket-sensor-6
 # hm2_7i93.0.gpio.006  this                   IN    7i37-IN6   optical-in
 # hm2_7i93.0.gpio.007  this                   IN    7i37-IN7   pressure-switch
-# hm2_7i93.0.gpio.008  -                      -     7i37-IN8   Not used
+# hm2_7i93.0.gpio.008  this                   IN    7i37-IN8   dust-shoe-retracted
 # hm2_7i93.0.gpio.009  -                      -     7i37-IN9   Not used
 # hm2_7i93.0.gpio.010  -                      -     7i37-IN10  Not used 
 # hm2_7i93.0.gpio.011  -                      -     7i37-IN11  Not used
@@ -96,8 +99,8 @@ setp hm2_7i93.0.stepgen.timer-number 1
 # hm2_7i93.0.gpio.017  this                   OUT   7i37-OUT1  atc-purge
 # hm2_7i93.0.gpio.018  this                   OUT   7i37-OUT2  optical-enable
 # hm2_7i93.0.gpio.019  this                   OUT   7i37-OUT3  ATC rack actuator
-# hm2_7i93.0.gpio.020  -                      -     7i37-OUT4  Not used
-# hm2_7i93.0.gpio.021  -                      -     7i37-OUT5  Not used 
+# hm2_7i93.0.gpio.020  this                   OUT   7i37-OUT4  dust-shoe-cylinder-extend
+# hm2_7i93.0.gpio.021  this                   OUT   7i37-OUT5  dust-shoe-cylinder-swing
 # hm2_7i93.0.gpio.022  -                      -     7i37-OUT6  Not used
 # hm2_7i93.0.gpio.023  -                      -     7i37-OUT7  Not used
 # hm2_7i93.0.stepgen.00 this                  -     EMD        X stepgen - IO pins 24 & 25
@@ -479,3 +482,11 @@ net atc-rack-actuator motion.digital-out-04 => hm2_7i93.0.gpio.019.out
 setp hm2_7i93.0.gpio.019.invert_output FALSE
 setp hm2_7i93.0.gpio.019.is_output TRUE
 net pressure-switch motion.digital-in-07 <= hm2_7i93.0.gpio.007.in_not
+
+net dust-shoe-retracted motion.digital-in-08 <= hm2_7i93.0.gpio.008.in_not
+net dust-shoe-cylinder-extend motion.digital-out-05 => hm2_7i93.0.gpio.020.out
+setp hm2_7i93.0.gpio.020.invert_output FALSE
+setp hm2_7i93.0.gpio.020.is_output TRUE
+net dust-shoe-cylinder-swing motion.digital-out-06 => hm2_7i93.0.gpio.021.out
+setp hm2_7i93.0.gpio.021.invert_output FALSE
+setp hm2_7i93.0.gpio.021.is_output TRUE

@@ -1,7 +1,5 @@
 # Include your custom_postgui HAL commands here
-# This file will not be overwritten when you run PNCconf again
 
-# loadrt or2
 addf or2.1 servo-thread
 
 net yl-home-sw => or2.1.in0
@@ -22,6 +20,9 @@ net probe-in => qtdragon.hal_led_probe
 net pressure-switch => qtdragon.hal_led_air_pressure
 
 net tool-change-mode <= qtdragon.tool_change_mode_button
+
+net dust-shoe-enabled <= qtdragon.btn_dustshoe_enabled
+net dust-shoe-retracted => qtdragon.hal_led_dust_shoe_retracted
 
 # enable manual tool change prompt in qtdragon
 net tool-change      hal_manualtoolchange.change   <=  iocontrol.0.tool-change

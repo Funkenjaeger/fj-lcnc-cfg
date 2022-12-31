@@ -71,7 +71,8 @@ class HandlerClass:
         self.lineedit_list = ["work_height", "touch_height", "sensor_height", "laser_x", "laser_y",
                               "sensor_x", "sensor_y", "camera_x", "camera_y",
                               "search_vel", "probe_vel", "max_probe", "eoffset_count"]
-        self.onoff_list = ["frame_program", "frame_tool", "frame_dro", "frame_override", "frame_status"]
+        self.onoff_list = ["frame_program", "frame_tool", "frame_dro", "frame_override", "frame_status",
+                           "frame_dustshoe"]
         self.auto_list = ["chk_eoffsets", "cmb_gcode_history"]
         self.axis_a_list = ["label_axis_a", "dro_axis_a", "action_zero_a", "axistoolbutton_a",
                             "action_home_a", "widget_jog_angular", "widget_increments_angular",
@@ -79,7 +80,8 @@ class HandlerClass:
         self.button_response_list = ["btn_start", "btn_home_all", "btn_home_x", "btn_home_y",
                             "btn_home_z", "action_home_a", "btn_reload_file", "macrobutton0", "macrobutton1",
                             "macrobutton2", "macrobutton3", "macrobutton4", "macrobutton5", "macrobutton6",
-                            "macrobutton7", "macrobutton8", "macrobutton9"]
+                            "macrobutton7", "macrobutton8", "macrobutton9", "tool_change_mode_button",
+                            "btn_dustshoe_enabled", "btn_dustshoe_up", "btn_dustshoe_down"]
 
         STATUS.connect('general', self.dialog_return)
         STATUS.connect('state-on', lambda w: self.enable_onoff(True))
@@ -314,6 +316,7 @@ class HandlerClass:
         self.w.filemanager.list.setAlternatingRowColors(False)
         self.w.filemanager_usb.list.setAlternatingRowColors(False)
         self.w.filemanager_usb.showList()
+        self.w.btn_dustshoe_enabled.setChecked(False)
 
         if not INFO.MACHINE_IS_METRIC:
             self.w.lbl_tool_sensor_B2W.setText('INCH')
@@ -809,6 +812,22 @@ class HandlerClass:
         info = "Ensure tooltip is within {} mm of tool sensor and click OK".format(self.w.lineEdit_max_probe.text())
         mess = {'NAME':'MESSAGE', 'ID':sensor, 'MESSAGE':'TOOL TOUCHOFF', 'MORE':info, 'TYPE':'OKCANCEL'}
         ACTION.CALL_DIALOG(mess)
+        
+    # dust shoe
+    def btn_dustshoe_down_clicked(self):
+        ACTION.CALL_MDI("M211")
+        self.add_status("Dust shoe engaged")
+        
+    def btn_dustshoe_up_clicked(self):
+        ACTION.CALL_MDI("M210")
+        self.add_status("Dust shoe retracted")
+        
+    def btn_dustshoe_enabled_clicked(self, checked):
+        if checked:
+            self.add_status("Dust shoe in auto mode (controlled by G-code)")
+        else:
+            self.add_status("Dust shoe disabled")
+            ACTION.CALL_MDI("M210")
         
     # status tab
     def btn_clear_status_clicked(self):
