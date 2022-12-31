@@ -1,0 +1,45 @@
+o<dust_shoe_down> sub
+
+(TODO: check override GUI button!)
+
+M66 P8 L0
+o100 if [#5399 EQ 1]
+ (dust shoe is in retracted state)
+ 
+ #<do_retract> = 1
+ o200 if [EXISTS[#<p>]]
+  o201 if [#<p> EQ 1]
+   o202 if [EXISTS[#<_dust_shoe_was_down>]]
+    o203 if [#<_dust_shoe_was_down> EQ 0]
+     #<do_retract> = 0
+    o203 endif
+   o202 else
+    #<do_retract> = 0
+   o202 endif
+  o201 endif
+ o200 endif
+ 
+ o300 if [#<do_retract> EQ 1]
+  M70                                    (Save modal state)
+  G17 G20 G40 G64 P0.001 G80 G94 G97 G98 (Baseline modal state)
+
+  G30.1        (store current position)
+  G53 G0 Z0    (raise spindle)
+  M64 P5       (lower dust shoe)
+  M66 P8 L3 Q1 (wait for dust shoe retract sensor to go inactive)
+  o101 if [#5399 LT 0]
+   (abort,dust shoe failed to lower!)
+  o101 endif
+  G4 P2.0      (wait for full extension)
+  M64 P6       (swing dust shoe under spindle)
+  G4 P2.0      (wait)
+
+  G30        (return spindle to prior position)
+
+  M72                                    (Restore saved modal state)
+ o300 endif
+
+o100 endif
+
+o<dust_shoe_down> endsub
+M2
