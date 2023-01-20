@@ -124,6 +124,7 @@ offset_table-G59.2 = User System 8
 offset_table-G59.3 = User System 9
 
 [FILEMANAGER_JUMPLIST]
+nc_files = /mnt/cnc/nc_files
 
 [SCREEN_CONTROL_LAST_SETTING]
 gcodegraphics-user-view = p
