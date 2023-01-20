@@ -1,16 +1,22 @@
 o<toolchange> sub
 o999 if[#<_task> NE 0]
+ G30.1 (latch current absolute position)
+ #<x0_abs> = #5181
+ #<y0_abs> = #5182
+
  M70                                                                (Save modal state)
  M5                                                                 (Turn spindle off)
  M9                                                                 (Turn coolant off)
  G17 G20 G40 G64 P0.001 G80 G94 G97 G98                             (Baseline modal state)
- 
+
  #<rack_extended> = 0
 
 o500 if[#<_current_tool> EQ #<_selected_tool>]                     (Same tool as before so no need to do anything.)
 
 o500 else 
 	(This is a different tool.)
+	
+	M210 P1 (retract dust shoe temporarily)
 	
 	o210 if [#<_hal[tool-change-mode]>]
 		; AUTOMATIC TOOL CHANGE
@@ -138,8 +144,11 @@ o500 else
 	M65 P1		(Turn off spindle purge air)
 	
 	o220 if [#<_selected_tool> NE 0]
-		M201
+		M201 P1		(Measure tool length WITHOUT restoring XY position or dust shoe state afterward)
 	o220 endif
+
+	G53 G90 G0 X#<x0_abs> Y#<y0_abs> (return to initial XY position)
+	M211 P1 (re-engage dust shoe conditionally - only if it was previously engaged)
 
 o500 endif
 
