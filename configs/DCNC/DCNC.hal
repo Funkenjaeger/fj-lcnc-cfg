@@ -22,8 +22,8 @@ loadrt not count=2
 addf not.0 servo-thread
 loadrt estop_latch
 addf estop-latch.0 servo-thread
-loadusr wj200_vfd_emd --device /dev/ttyUSB0
-loadusr aircompressor
+loadusr hal_components/bin/wj200_vfd_emd --device /dev/ttyUSB0
+loadusr hal_components/bin/aircompressor
 
 addf hm2_7i93.0.read          servo-thread
 addf motion-command-handler   servo-thread
