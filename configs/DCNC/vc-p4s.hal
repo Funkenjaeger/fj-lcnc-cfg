@@ -1,5 +1,5 @@
 # 0---vc-p4s Control Pendant
-loadusr -W vc-p4s
+loadusr -W ../../vistacnc/vc-p4s
 
 loadrt and2 names=and2.vc
 addf and2.vc servo-thread
