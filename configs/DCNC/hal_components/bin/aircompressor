@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/venv/linuxcnc_venv/bin/python
 import hal, time, sys, os
 import linuxcnc
 from Adafruit_IO import MQTTClient
