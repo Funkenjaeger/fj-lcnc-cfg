@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="buttons">
+    <file>images/down-arrow.png</file>
+    <file>images/up-arrow.png</file>
     <file>images/unchecked.png</file>
     <file>images/slide_off.png</file>
     <file>images/slide_on.png</file>

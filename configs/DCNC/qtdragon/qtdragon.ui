@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1600</width>
-    <height>1161</height>
+    <width>1602</width>
+    <height>1175</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -297,6 +297,7 @@
                   <property name="font">
                    <font>
                     <pointsize>10</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -344,6 +345,7 @@
                   <property name="font">
                    <font>
                     <pointsize>10</pointsize>
+                    <weight>75</weight>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -2944,7 +2946,7 @@ RESET</string>
                </widget>
               </item>
               <item>
-               <widget class="ActionButton" name="action_exit">
+               <widget class="QPushButton" name="btn_exit">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -2974,48 +2976,6 @@ RESET</string>
                 </property>
                 <property name="text">
                  <string>EXIT</string>
-                </property>
-                <property name="exit_action" stdset="0">
-                 <bool>true</bool>
-                </property>
-                <property name="template_label_option" stdset="0">
-                 <bool>false</bool>
-                </property>
-                <property name="joint_number" stdset="0">
-                 <number>0</number>
-                </property>
-                <property name="incr_imperial_number" stdset="0">
-                 <double>0.010000000000000</double>
-                </property>
-                <property name="incr_mm_number" stdset="0">
-                 <double>0.025000000000000</double>
-                </property>
-                <property name="incr_angular_number" stdset="0">
-                 <double>-1.000000000000000</double>
-                </property>
-                <property name="toggle_float_option" stdset="0">
-                 <bool>false</bool>
-                </property>
-                <property name="float_num" stdset="0">
-                 <double>100.000000000000000</double>
-                </property>
-                <property name="float_alt_num" stdset="0">
-                 <double>50.000000000000000</double>
-                </property>
-                <property name="view_type_string" stdset="0">
-                 <string>P</string>
-                </property>
-                <property name="command_text_string" stdset="0">
-                 <string/>
-                </property>
-                <property name="ini_mdi_number" stdset="0">
-                 <number>0</number>
-                </property>
-                <property name="textTemplate" stdset="0">
-                 <string>%1.3f in</string>
-                </property>
-                <property name="alt_textTemplate" stdset="0">
-                 <string>%1.2f mm</string>
                 </property>
                </widget>
               </item>
@@ -3118,7 +3078,7 @@ RESET</string>
                     <enum>QFrame::Raised</enum>
                    </property>
                    <property name="currentIndex">
-                    <number>1</number>
+                    <number>10</number>
                    </property>
                    <widget class="QWidget" name="main_tab_widgetPage1">
                     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -7692,7 +7652,7 @@ TO FILE</string>
                      <item>
                       <widget class="QTabWidget" name="tabWidget_utilities">
                        <property name="currentIndex">
-                        <number>0</number>
+                        <number>2</number>
                        </property>
                        <widget class="QWidget" name="facing">
                         <attribute name="title">
@@ -9119,6 +9079,261 @@ IN/MIN</string>
                    </property>
                   </spacer>
                  </item>
+                 <item>
+                  <widget class="QFrame" name="frame_dustshoe">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::Panel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Sunken</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_12">
+                    <item>
+                     <widget class="PushButton" name="btn_dustshoe_enabled">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>85</width>
+                        <height>36</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>85</width>
+                        <height>36</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Toggle Manual vs. Automatic tool change with M6</string>
+                      </property>
+                      <property name="text">
+                       <string>DUST SHOE
+ENABLED?</string>
+                      </property>
+                      <property name="checkable">
+                       <bool>true</bool>
+                      </property>
+                      <property name="checked">
+                       <bool>false</bool>
+                      </property>
+                      <property name="indicator_option" stdset="0">
+                       <bool>false</bool>
+                      </property>
+                      <property name="checked_state_text_option" stdset="0">
+                       <bool>true</bool>
+                      </property>
+                      <property name="python_command_option" stdset="0">
+                       <bool>false</bool>
+                      </property>
+                      <property name="on_color" stdset="0">
+                       <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>255</blue>
+                       </color>
+                      </property>
+                      <property name="indicator_size" stdset="0">
+                       <double>0.200000000000000</double>
+                      </property>
+                      <property name="true_state_string" stdset="0">
+                       <string>DUST SHOE
+AUTO</string>
+                      </property>
+                      <property name="false_state_string" stdset="0">
+                       <string>DUST SHOE
+DISABLED</string>
+                      </property>
+                      <property name="true_python_cmd_string" stdset="0">
+                       <string/>
+                      </property>
+                      <property name="false_python_cmd_string" stdset="0">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="widget_5" native="true">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_32">
+                       <property name="spacing">
+                        <number>2</number>
+                       </property>
+                       <property name="leftMargin">
+                        <number>2</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>2</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>2</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>2</number>
+                       </property>
+                       <item alignment="Qt::AlignHCenter">
+                        <widget class="QLabel" name="label_52">
+                         <property name="text">
+                          <string>Retracted</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item alignment="Qt::AlignHCenter">
+                        <widget class="LED" name="hal_led_dust_shoe_retracted" native="true">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>16</width>
+                           <height>16</height>
+                          </size>
+                         </property>
+                         <property name="diameter" stdset="0">
+                          <number>15</number>
+                         </property>
+                         <property name="color" stdset="0">
+                          <color>
+                           <red>0</red>
+                           <green>255</green>
+                           <blue>0</blue>
+                          </color>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="widget_6" native="true">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_34">
+                       <property name="spacing">
+                        <number>2</number>
+                       </property>
+                       <property name="leftMargin">
+                        <number>2</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>2</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>2</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>2</number>
+                       </property>
+                       <item>
+                        <widget class="QPushButton" name="btn_dustshoe_up">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>40</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="qtdragon.qrc">
+                           <normaloff>:/buttons/images/up-arrow.png</normaloff>:/buttons/images/up-arrow.png</iconset>
+                         </property>
+                         <property name="iconSize">
+                          <size>
+                           <width>22</width>
+                           <height>22</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="btn_dustshoe_down">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>40</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="qtdragon.qrc">
+                           <normaloff>:/buttons/images/down-arrow.png</normaloff>:/buttons/images/down-arrow.png</iconset>
+                         </property>
+                         <property name="iconSize">
+                          <size>
+                           <width>22</width>
+                           <height>16</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
                 </layout>
                </widget>
               </item>
@@ -9976,6 +10191,7 @@ SPINDLE</string>
                  </property>
                  <property name="font">
                   <font>
+                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -15050,8 +15266,8 @@ TOOL CHANGE</string>
                  <property name="on_color" stdset="0">
                   <color>
                    <red>0</red>
-                   <green>255</green>
-                   <blue>0</blue>
+                   <green>0</green>
+                   <blue>255</blue>
                   </color>
                  </property>
                  <property name="indicator_size" stdset="0">
@@ -16343,8 +16559,8 @@ TOOL CHANGE</string>
    <slot>btn_touchoff_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>154</x>
-     <y>83</y>
+     <x>152</x>
+     <y>84</y>
     </hint>
     <hint type="destinationlabel">
      <x>322</x>
@@ -16359,8 +16575,8 @@ TOOL CHANGE</string>
    <slot>btn_ref_laser_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>115</x>
-     <y>83</y>
+     <x>81</x>
+     <y>53</y>
     </hint>
     <hint type="destinationlabel">
      <x>238</x>
@@ -16375,8 +16591,8 @@ TOOL CHANGE</string>
    <slot>btn_m61_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>135</x>
-     <y>80</y>
+     <x>136</x>
+     <y>768</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -16391,8 +16607,8 @@ TOOL CHANGE</string>
    <slot>btn_touchoff_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>160</x>
-     <y>80</y>
+     <x>262</x>
+     <y>667</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -16407,8 +16623,8 @@ TOOL CHANGE</string>
    <slot>btn_goto_sensor_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>75</x>
-     <y>83</y>
+     <x>73</x>
+     <y>84</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -16455,8 +16671,8 @@ TOOL CHANGE</string>
    <slot>btn_ref_camera_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>134</x>
-     <y>83</y>
+     <x>81</x>
+     <y>53</y>
     </hint>
     <hint type="destinationlabel">
      <x>273</x>
@@ -16471,8 +16687,8 @@ TOOL CHANGE</string>
    <slot>btn_reload_file_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>112</x>
-     <y>1098</y>
+     <x>225</x>
+     <y>653</y>
     </hint>
     <hint type="destinationlabel">
      <x>168</x>
@@ -16535,8 +16751,8 @@ TOOL CHANGE</string>
    <slot>disable_pause_buttons()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>232</x>
-     <y>1098</y>
+     <x>285</x>
+     <y>653</y>
     </hint>
     <hint type="destinationlabel">
      <x>358</x>
@@ -16555,8 +16771,8 @@ TOOL CHANGE</string>
      <y>855</y>
     </hint>
     <hint type="destinationlabel">
-     <x>185</x>
-     <y>1127</y>
+     <x>297</x>
+     <y>653</y>
     </hint>
    </hints>
   </connection>
@@ -16583,8 +16799,8 @@ TOOL CHANGE</string>
    <slot>btn_home_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>800</x>
-     <y>908</y>
+     <x>929</x>
+     <y>930</y>
     </hint>
     <hint type="destinationlabel">
      <x>781</x>
@@ -16615,8 +16831,8 @@ TOOL CHANGE</string>
    <slot>btn_home_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>800</x>
-     <y>965</y>
+     <x>929</x>
+     <y>985</y>
     </hint>
     <hint type="destinationlabel">
      <x>799</x>
@@ -16631,8 +16847,8 @@ TOOL CHANGE</string>
    <slot>btn_home_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>800</x>
-     <y>1021</y>
+     <x>929</x>
+     <y>1039</y>
     </hint>
     <hint type="destinationlabel">
      <x>846</x>
@@ -16647,8 +16863,8 @@ TOOL CHANGE</string>
    <slot>btn_maxv_50_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>858</x>
-     <y>849</y>
+     <x>985</x>
+     <y>885</y>
     </hint>
     <hint type="destinationlabel">
      <x>719</x>
@@ -16663,8 +16879,8 @@ TOOL CHANGE</string>
    <slot>slider_maxv_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>948</x>
-     <y>851</y>
+     <x>1176</x>
+     <y>885</y>
     </hint>
     <hint type="destinationlabel">
      <x>878</x>
@@ -16679,8 +16895,8 @@ TOOL CHANGE</string>
    <slot>slider_rapid_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>948</x>
-     <y>941</y>
+     <x>1176</x>
+     <y>970</y>
     </hint>
     <hint type="destinationlabel">
      <x>935</x>
@@ -16695,8 +16911,8 @@ TOOL CHANGE</string>
    <slot>btn_maxv_100_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>994</x>
-     <y>849</y>
+     <x>1222</x>
+     <y>885</y>
     </hint>
     <hint type="destinationlabel">
      <x>1064</x>
@@ -16711,8 +16927,8 @@ TOOL CHANGE</string>
    <slot>slow_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1354</x>
-     <y>522</y>
+     <x>1584</x>
+     <y>442</y>
     </hint>
     <hint type="destinationlabel">
      <x>719</x>
@@ -16743,8 +16959,8 @@ TOOL CHANGE</string>
    <slot>btn_dimensions_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>440</x>
-     <y>113</y>
+     <x>482</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -16759,8 +16975,8 @@ TOOL CHANGE</string>
    <slot>cam_zoom_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>458</x>
-     <y>165</y>
+     <x>502</x>
+     <y>145</y>
     </hint>
     <hint type="destinationlabel">
      <x>1105</x>
@@ -16775,8 +16991,8 @@ TOOL CHANGE</string>
    <slot>chk_use_sensor_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>626</x>
-     <y>82</y>
+     <x>668</x>
+     <y>83</y>
     </hint>
     <hint type="destinationlabel">
      <x>508</x>
@@ -16791,8 +17007,8 @@ TOOL CHANGE</string>
    <slot>btn_gcode_edit_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>471</x>
-     <y>122</y>
+     <x>508</x>
+     <y>104</y>
     </hint>
     <hint type="destinationlabel">
      <x>515</x>
@@ -16807,8 +17023,8 @@ TOOL CHANGE</string>
    <slot>cam_dia_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>458</x>
-     <y>171</y>
+     <x>502</x>
+     <y>151</y>
     </hint>
     <hint type="destinationlabel">
      <x>1124</x>
@@ -16823,7 +17039,7 @@ TOOL CHANGE</string>
    <slot>chk_use_virtual_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>626</x>
+     <x>668</x>
      <y>81</y>
     </hint>
     <hint type="destinationlabel">
@@ -16839,8 +17055,8 @@ TOOL CHANGE</string>
    <slot>chk_alpha_mode_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>626</x>
-     <y>70</y>
+     <x>668</x>
+     <y>71</y>
     </hint>
     <hint type="destinationlabel">
      <x>645</x>
@@ -16855,8 +17071,8 @@ TOOL CHANGE</string>
    <slot>btn_save_status_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>522</x>
-     <y>124</y>
+     <x>508</x>
+     <y>104</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -16871,8 +17087,8 @@ TOOL CHANGE</string>
    <slot>chk_override_limits_checked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>626</x>
-     <y>85</y>
+     <x>668</x>
+     <y>86</y>
     </hint>
     <hint type="destinationlabel">
      <x>719</x>
@@ -16887,8 +17103,8 @@ TOOL CHANGE</string>
    <slot>cam_rot_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>458</x>
-     <y>177</y>
+     <x>502</x>
+     <y>157</y>
     </hint>
     <hint type="destinationlabel">
      <x>1156</x>
@@ -16903,7 +17119,7 @@ TOOL CHANGE</string>
    <slot>chk_use_camera_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>626</x>
+     <x>668</x>
      <y>84</y>
     </hint>
     <hint type="destinationlabel">
@@ -16919,8 +17135,8 @@ TOOL CHANGE</string>
    <slot>btn_copy_file_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>471</x>
-     <y>131</y>
+     <x>508</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel">
      <x>471</x>
@@ -16935,8 +17151,8 @@ TOOL CHANGE</string>
    <slot>chk_run_from_line_checked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>626</x>
-     <y>79</y>
+     <x>668</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
      <x>554</x>
@@ -16951,8 +17167,8 @@ TOOL CHANGE</string>
    <slot>btn_load_file_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>471</x>
-     <y>114</y>
+     <x>508</x>
+     <y>104</y>
     </hint>
     <hint type="destinationlabel">
      <x>1059</x>
@@ -16967,8 +17183,8 @@ TOOL CHANGE</string>
    <slot>btn_copy_file_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>471</x>
-     <y>129</y>
+     <x>508</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel">
      <x>446</x>
@@ -16983,8 +17199,8 @@ TOOL CHANGE</string>
    <slot>btn_clear_status_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>522</x>
-     <y>114</y>
+     <x>508</x>
+     <y>104</y>
     </hint>
     <hint type="destinationlabel">
      <x>1039</x>
@@ -16999,8 +17215,8 @@ TOOL CHANGE</string>
    <slot>chk_inhibit_selection_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>626</x>
-     <y>72</y>
+     <x>668</x>
+     <y>73</y>
     </hint>
     <hint type="destinationlabel">
      <x>719</x>
@@ -17015,8 +17231,8 @@ TOOL CHANGE</string>
    <slot>btn_m6_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>357</x>
-     <y>712</y>
+     <x>262</x>
+     <y>768</y>
     </hint>
     <hint type="destinationlabel">
      <x>799</x>
@@ -17039,6 +17255,76 @@ TOOL CHANGE</string>
      <y>580</y>
     </hint>
    </hints>
+  </connection>
+  <connection>
+   <sender>btn_dustshoe_enabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>btn_dustshoe_enabled_clicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1377</x>
+     <y>782</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1603</x>
+     <y>734</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_dustshoe_up</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>btn_dustshoe_up_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1534</x>
+     <y>774</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1602</x>
+     <y>729</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_dustshoe_down</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>btn_dustshoe_down_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1553</x>
+     <y>794</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1602</x>
+     <y>780</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_exit</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>exit_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1524</x>
+     <y>32</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1591</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_machine_on</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>action_machine_on_toggled(bool)</slot>
   </connection>
  </connections>
  <designerdata>
@@ -17115,9 +17401,14 @@ TOOL CHANGE</string>
   <slot>chk_use_basicprobe_changed()</slot>
   <slot>chk_use_versaprobe_changed()</slot>
   <slot>tab_utilities_changed()</slot>
+  <slot>btn_dustshoe_down_clicked()</slot>
+  <slot>btn_dustshoe_up_clicked()</slot>
+  <slot>btn_dustshoe_enabled_clicked(bool)</slot>
+  <slot>exit_clicked()</slot>
+  <slot>action_machine_on_toggled(bool)</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="page_buttonGroup"/>
   <buttongroup name="mode_buttonGroup"/>
+  <buttongroup name="page_buttonGroup"/>
  </buttongroups>
 </ui>

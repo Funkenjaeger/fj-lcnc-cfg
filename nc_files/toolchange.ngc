@@ -1,16 +1,23 @@
 o<toolchange> sub
 o999 if[#<_task> NE 0]
+ G30.1 (latch current absolute position)
+ #<x0_abs> = #5181
+ #<y0_abs> = #5182
+
  M70                                                                (Save modal state)
  M5                                                                 (Turn spindle off)
  M9                                                                 (Turn coolant off)
  G17 G20 G40 G64 P0.001 G80 G94 G97 G98                             (Baseline modal state)
- 
+
  #<rack_extended> = 0
 
 o500 if[#<_current_tool> EQ #<_selected_tool>]                     (Same tool as before so no need to do anything.)
 
 o500 else 
 	(This is a different tool.)
+	
+	G53 G90 G0 Z0	(Retract Z to preempt unnecessary movement after dust shoe retraction)
+	M210 P1 (retract dust shoe temporarily)
 	
 	o210 if [#<_hal[tool-change-mode]>]
 		; AUTOMATIC TOOL CHANGE
@@ -24,14 +31,15 @@ o500 else
 			(abort,No air pressure)
 		o216 endif
 		
-		o211 if [#<_current_tool> NE 0]
+		o211 if [#<_current_tool> NE 0 AND #<_current_pocket> GT 0]
+			(T0 is 'no tool', negative tool numbers are always changed manually)
 			M66 P[#<_current_pocket> - 1] L0												(Check tool pocket sensor)
 			o215 if [#5399 EQ 1]
 				(abort,Current pocket has a tool in it)
 			o215 endif
 		o211 endif
 		
-		o212 if [#<_selected_tool> NE 0]
+		o212 if [#<_selected_tool> NE 0 AND #<_selected_pocket> GT 0]
 			M66 P[#<_selected_pocket> - 1] L0 												(Check tool pocket sensor)
 			o221 if [#5399 EQ 0]
 				(abort,Selected pocket has no tool in it)
@@ -43,9 +51,11 @@ o500 else
 		M64 P1				(Turn on spindle purge air)
 		
 		G90 G0                                                          (Absolute distance mode Rapid move)
+		;TODO: is this the right safe height??
 		G53 Z#<_ini[TOOLSENSOR]Z_SAFE>	   	 (Change Z Position)
 		
-		o213 if [#<_current_tool> NE 0]
+		o213 if [#<_current_tool> NE 0 AND #<_current_pocket> GT 0]
+			(Automatically unload current tool)
 			G53 G0 X#<pocket_current_x> Y#<pocket_approach_y>								(Rapid XY to approach position for current tool's pocket)
 			M64 P4																			(Extend ATC tool rack)
 			G4 P#<_ini[TOOL_CHANGE]DWELL_TIME_RACK>											(Wait for ATC rack actuation)
@@ -55,6 +65,7 @@ o500 else
 			G4 P0.1
 			M66 P[#<_current_pocket>-1] L0
 			o222 if [#5399 EQ 0]
+				;TODO: retract Z a little to clear pull stud of adjacent tool
 				M65 P4																		(Retract ATC tool rack)
 				G4 P0.1
 				(abort,Failed to deposit current tool)
@@ -66,13 +77,25 @@ o500 else
 			G4 P0.1
 			M66 P[#<_current_pocket>-1] L0
 			o313 if [#5399 EQ 0]
+				;TODO: retract Z a little to clear pull stud of adjacent tool
 				M65 P4																		(Retract ATC tool rack)
 				(abort,Tool not in pocket after Z retract)
 			o313 endif
 			M61 Q0																			(Set current tool to 0)
+		o213 elseif [#<_current_pocket> LT 0]
+			(Manually unload current tool)
+			#<st> = #<_selected_tool>
+			G90 G0															(Absolute distance mode Rapid move)
+			G53 Z#<_ini[TOOLSENSOR]Z_SAFE>									(Change Z Position)
+			G53 X#<_ini[TOOL_CHANGE]MANUAL_CHANGE_LOC_X> Y#<_ini[TOOL_CHANGE]MANUAL_CHANGE_LOC_Y>   	 	(Move XY to manual change position)
+			M6 T0											(Do built-in M6 routine - pops up prompt.  For T0, will prompt user to remove tool.)
+			T#<st>
+		o213 else
+			(Tool 0 = no tool, nothing to unload)
 		o213 endif
 		
-		o214 if [#<_selected_tool> NE 0]
+		o214 if [#<_selected_tool> NE 0 AND #<_selected_pocket> GT 0]
+			(Automatically load selected tool)
 			M64 P0 																			(Release drawbar immediately)
 			G53 G0 Z#<pocket_safe_z>														(Rapid Z to clear tool holders)
 			G53 G0 X#<pocket_selected_x> Y#<_ini[TOOL_CHANGE]POCKET_Y>						(Rapid X over selected tool)
@@ -86,6 +109,7 @@ o500 else
 			G53 G0 Z#<_ini[TOOL_CHANGE]POCKET_Z>
 			G4 P#<_ini[TOOL_CHANGE]DWELL_TIME_DRAWBAR>										(Wait for drawbar engagement)
 			G53 G1 Y#<pocket_approach_y> F#<_ini[TOOL_CHANGE]APPROACH_VELOCITY_Y>			(Slot tool out of pocket)
+			;TODO: retract Z a little to clear pull stud of adjacent tool
 			M65 P4																			(Retract ATC tool rack)
 			G4 P#<_ini[TOOL_CHANGE]DWELL_TIME_RACK>											(Wait for ATC rack actuation)
 			#<rack_extended> = 0
@@ -95,7 +119,15 @@ o500 else
 			o315 endif
 			G53 G0 Z0																		(Rapid retract Z)
 			M61 Q#<_selected_tool>															(Set current tool)
+		o214 elseif [#<_selected_pocket> LT 0]
+			(Manually load selected tool)
+			M63 P0 															(Engage drawbar)
+			G90 G0															(Absolute distance mode Rapid move)
+			G53 Z#<_ini[TOOLSENSOR]Z_SAFE>									(Change Z Position)
+			G53 X#<_ini[TOOL_CHANGE]MANUAL_CHANGE_LOC_X> Y#<_ini[TOOL_CHANGE]MANUAL_CHANGE_LOC_Y>   	 	(Move XY to manual change position)
+			M6 T#<_selected_tool>											(Do built-in M6 routine - pops up prompt)
 		o214 else
+			(Tool 0 = no tool, nothing to load)
 			M65 P0																			(Engage drawbar immediately)
 		o214 endif
 	o210 else
@@ -105,10 +137,6 @@ o500 else
 		
 		G90 G0															(Absolute distance mode Rapid move)
 		G53 Z#<_ini[TOOLSENSOR]Z_SAFE>									(Change Z Position)
-		
-		G59.3															(Switch temporarily to G59.3 WCS for probing)
-		G10 L2 P9 X0 Y0 Z0												(Zero out work coordinate offsets in G59.3)
-		
 		G53 X#<_ini[TOOL_CHANGE]MANUAL_CHANGE_LOC_X> Y#<_ini[TOOL_CHANGE]MANUAL_CHANGE_LOC_Y>   	 	(Move XY to manual change position)
 		M6 T#<_selected_tool>											(Do built-in M6 routine - pops up prompt)
 	o210 endif
@@ -120,10 +148,13 @@ o500 else
 	
 	M65 P1		(Turn off spindle purge air)
 	
- o220 if [#<_selected_tool> NE 0]
-  M201
- o220 endif
- 
+	o220 if [#<_selected_tool> NE 0]
+		M201 P1		(Measure tool length WITHOUT restoring XY position or dust shoe state afterward)
+	o220 endif
+
+	G53 G90 G0 X#<x0_abs> Y#<y0_abs> (return to initial XY position)
+	M211 P1 (re-engage dust shoe conditionally - only if it was previously engaged)
+
 o500 endif
 
 M72                                                                	(Restore saved modal state)
