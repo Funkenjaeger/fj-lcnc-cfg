@@ -105,6 +105,7 @@ class HandlerClass:
         STATUS.connect('command-stopped', lambda w: self.stop_timer())
         STATUS.connect('progress', lambda w,p,t: self.updateProgress(p,t))
         STATUS.connect('override-limits-changed', lambda w, state, data: self._check_override_limits(state, data))
+        #STATUS.connect('periodic', lambda w: self.foo()) # DEBUG
 
         self.html = """<html>
 <head>
@@ -587,6 +588,31 @@ class HandlerClass:
             if self.w.tabWidget_utilities.currentIndex() == 2:
                 self.w.stackedWidget.setCurrentIndex(4)
 
+    def exit_clicked(self):
+        self.add_status("Retracting dust shoe before exit")
+        ACTION.CALL_MDI_WAIT("M210")
+        self.w.close()
+
+    def wait_air_pressure(self):
+        if self.w.hal_led_air_pressure.state and self.air_pressure_warning_dialog:
+            self.air_pressure_warning_dialog.close()
+            STATUS.disconnect(self.wait_air_pressure_connection_id)
+
+    def action_machine_on_toggled(self, state):
+        if state:
+            d = QtWidgets.QDialog(self.w)
+            self.air_pressure_warning_dialog = d
+            d.setWindowTitle("Waiting for air pressure...")
+            t_label = QtWidgets.QLabel("Please wait for air pressure")
+            button = QtWidgets.QPushButton("Cancel")
+            layout = QtWidgets.QVBoxLayout()
+            layout.addWidget(t_label)
+            layout.addWidget(button)
+            d.setLayout(layout)
+            button.clicked.connect(d.reject) 
+            self.wait_air_pressure_connection_id = STATUS.connect('periodic', lambda w: self.wait_air_pressure())
+            d.open()
+
     # gcode frame
     def cmb_gcode_history_clicked(self):
         if self.w.cmb_gcode_history.currentIndex() == 0: return
@@ -634,6 +660,11 @@ class HandlerClass:
     # DRO frame
     def btn_home_all_clicked(self, obj):
         if self.home_all is False:
+            # home Z first, so we can safely retract the dust shoe before homing X & Y
+            zj = INFO.GET_JOG_FROM_NAME['Z']
+            ACTION.SET_MACHINE_HOMING(zj)
+            ACTION.CALL_MDI_WAIT("M210")
+            self.add_status("I done told it to run M210...")
             ACTION.SET_MACHINE_HOMING(-1)
         else:
         # instantiate dialog box
@@ -1076,6 +1107,11 @@ class HandlerClass:
         self.timer_on = False
         if STATUS.is_auto_mode():
             self.add_status("Run timer stopped at {}".format(self.w.lbl_runtime.text()))
+
+    def foo(self):
+        if STATUS.is_on_and_idle and STATUS.is_mdi_mode():
+            ACTION.SET_MANUAL_MODE()
+            self.add_status("Foo")
 
     def back(self):
         if os.path.exists(self.default_setup):
