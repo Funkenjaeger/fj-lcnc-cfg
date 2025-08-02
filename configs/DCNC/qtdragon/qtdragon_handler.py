@@ -71,7 +71,8 @@ class HandlerClass:
         self.lineedit_list = ["work_height", "touch_height", "sensor_height", "laser_x", "laser_y",
                               "sensor_x", "sensor_y", "camera_x", "camera_y",
                               "search_vel", "probe_vel", "max_probe", "eoffset_count"]
-        self.onoff_list = ["frame_program", "frame_tool", "frame_dro", "frame_override", "frame_status"]
+        self.onoff_list = ["frame_program", "frame_tool", "frame_dro", "frame_override", "frame_status",
+                           "frame_dustshoe"]
         self.auto_list = ["chk_eoffsets", "cmb_gcode_history"]
         self.axis_a_list = ["label_axis_a", "dro_axis_a", "action_zero_a", "axistoolbutton_a",
                             "action_home_a", "widget_jog_angular", "widget_increments_angular",
@@ -79,7 +80,8 @@ class HandlerClass:
         self.button_response_list = ["btn_start", "btn_home_all", "btn_home_x", "btn_home_y",
                             "btn_home_z", "action_home_a", "btn_reload_file", "macrobutton0", "macrobutton1",
                             "macrobutton2", "macrobutton3", "macrobutton4", "macrobutton5", "macrobutton6",
-                            "macrobutton7", "macrobutton8", "macrobutton9"]
+                            "macrobutton7", "macrobutton8", "macrobutton9", "tool_change_mode_button",
+                            "btn_dustshoe_enabled", "btn_dustshoe_up", "btn_dustshoe_down"]
 
         STATUS.connect('general', self.dialog_return)
         STATUS.connect('state-on', lambda w: self.enable_onoff(True))
@@ -103,6 +105,7 @@ class HandlerClass:
         STATUS.connect('command-stopped', lambda w: self.stop_timer())
         STATUS.connect('progress', lambda w,p,t: self.updateProgress(p,t))
         STATUS.connect('override-limits-changed', lambda w, state, data: self._check_override_limits(state, data))
+        #STATUS.connect('periodic', lambda w: self.foo()) # DEBUG
 
         self.html = """<html>
 <head>
@@ -314,6 +317,7 @@ class HandlerClass:
         self.w.filemanager.list.setAlternatingRowColors(False)
         self.w.filemanager_usb.list.setAlternatingRowColors(False)
         self.w.filemanager_usb.showList()
+        self.w.btn_dustshoe_enabled.setChecked(False)
 
         if not INFO.MACHINE_IS_METRIC:
             self.w.lbl_tool_sensor_B2W.setText('INCH')
@@ -584,6 +588,31 @@ class HandlerClass:
             if self.w.tabWidget_utilities.currentIndex() == 2:
                 self.w.stackedWidget.setCurrentIndex(4)
 
+    def exit_clicked(self):
+        self.add_status("Retracting dust shoe before exit")
+        ACTION.CALL_MDI_WAIT("M210")
+        self.w.close()
+
+    def wait_air_pressure(self):
+        if self.w.hal_led_air_pressure.state and self.air_pressure_warning_dialog:
+            self.air_pressure_warning_dialog.close()
+            STATUS.disconnect(self.wait_air_pressure_connection_id)
+
+    def action_machine_on_toggled(self, state):
+        if state:
+            d = QtWidgets.QDialog(self.w)
+            self.air_pressure_warning_dialog = d
+            d.setWindowTitle("Waiting for air pressure...")
+            t_label = QtWidgets.QLabel("Please wait for air pressure")
+            button = QtWidgets.QPushButton("Cancel")
+            layout = QtWidgets.QVBoxLayout()
+            layout.addWidget(t_label)
+            layout.addWidget(button)
+            d.setLayout(layout)
+            button.clicked.connect(d.reject) 
+            self.wait_air_pressure_connection_id = STATUS.connect('periodic', lambda w: self.wait_air_pressure())
+            d.open()
+
     # gcode frame
     def cmb_gcode_history_clicked(self):
         if self.w.cmb_gcode_history.currentIndex() == 0: return
@@ -631,6 +660,11 @@ class HandlerClass:
     # DRO frame
     def btn_home_all_clicked(self, obj):
         if self.home_all is False:
+            # home Z first, so we can safely retract the dust shoe before homing X & Y
+            zj = INFO.GET_JOG_FROM_NAME['Z']
+            ACTION.SET_MACHINE_HOMING(zj)
+            ACTION.CALL_MDI_WAIT("M210")
+            self.add_status("I done told it to run M210...")
             ACTION.SET_MACHINE_HOMING(-1)
         else:
         # instantiate dialog box
@@ -809,6 +843,22 @@ class HandlerClass:
         info = "Ensure tooltip is within {} mm of tool sensor and click OK".format(self.w.lineEdit_max_probe.text())
         mess = {'NAME':'MESSAGE', 'ID':sensor, 'MESSAGE':'TOOL TOUCHOFF', 'MORE':info, 'TYPE':'OKCANCEL'}
         ACTION.CALL_DIALOG(mess)
+        
+    # dust shoe
+    def btn_dustshoe_down_clicked(self):
+        ACTION.CALL_MDI("M211")
+        self.add_status("Dust shoe engaged")
+        
+    def btn_dustshoe_up_clicked(self):
+        ACTION.CALL_MDI("M210")
+        self.add_status("Dust shoe retracted")
+        
+    def btn_dustshoe_enabled_clicked(self, checked):
+        if checked:
+            self.add_status("Dust shoe in auto mode (controlled by G-code)")
+        else:
+            self.add_status("Dust shoe disabled")
+            ACTION.CALL_MDI("M210")
         
     # status tab
     def btn_clear_status_clicked(self):
@@ -1057,6 +1107,11 @@ class HandlerClass:
         self.timer_on = False
         if STATUS.is_auto_mode():
             self.add_status("Run timer stopped at {}".format(self.w.lbl_runtime.text()))
+
+    def foo(self):
+        if STATUS.is_on_and_idle and STATUS.is_mdi_mode():
+            ACTION.SET_MANUAL_MODE()
+            self.add_status("Foo")
 
     def back(self):
         if os.path.exists(self.default_setup):

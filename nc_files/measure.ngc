@@ -1,13 +1,15 @@
 o<measure> sub
  #<coord_system_was>=#<_coord_system>  (Save current coordinate system.)
- #<wcs_z_varnumber> = [5203 + [20* #5220]] (5223 for G54, 5243 for G55, etc)
- #<wcs_z> = #[#<wcs_z_varnumber>]
+ G30.1 (latch current absolute position)
+ #<x0_abs> = #5181
+ #<y0_abs> = #5182
 
  M70                                                                (Save modal state)
  M5                                                                 (Turn spindle off)
  M9                                                                 (Turn coolant off)
  G17 G20 G40 G64 P0.001 G80 G94 G97 G98                             (Baseline modal state)
  
+ M210 P1 (retract dust shoe temporarily)
 
  o217 if [#<coord_system_was> EQ 593]
   (msg,Note: G59.3 coordinate system is active, be sure that's what you intended!)
@@ -28,7 +30,6 @@ o<measure> sub
  o300 endif
  
  (Measure tool to get offset)
- ;S500 M4																	(Run spindle in reverse at minimum speed - Note: causes downstream issues, don't do this!)
  M64 P2																		(Turn on optical sensor)
  G38.2 G90 Z#<_ini[TOOLSENSOR]Z_PROBE_END> F#<_ini[TOOLSENSOR]SEARCH_VEL>	(Probe move to optical sensor)
  M65 P2																		(Turn off optical sensor)
@@ -38,7 +39,6 @@ o<measure> sub
  ;G0 G91 Z#<_ini[TOOLSENSOR]Z_BACKOFF>										(Back off safe distance)
  ;G38.2 G90 Z#<_ini[TOOLSENSOR]Z_PROBE_END> F#<_ini[TOOLSENSOR]FINE_VEL>		(Measure fine)
  #<_new_tlo> = #5063
- M5																			(Stop spindle)
  ;G38.5 G91 Z#<_ini[TOOLSENSOR]Z_BACKOFF> F#<_ini[TOOLSENSOR]COARSE_VEL>		(Back off until probe breaks contact)
  ;G0 G91 Z#<_ini[TOOLSENSOR]Z_BACKOFF>										(Back off safe distance)		
  G53 G90 G0 Z#<_ini[TOOLSENSOR]Z_SAFE>										(Z up to safe position)
@@ -68,6 +68,19 @@ o<measure> sub
  o107 if[#<coord_system_was> EQ 592]
    G59.2
  o107 endif
+
+ (return to initial XY position and end temporary dust shoe retract *unless* P1 argument was passed)
+ #<reengage> = 1
+ o900 if [EXISTS[#<p>]]
+  o901 if [#<p> EQ 1] 
+   #<reengage> = 0
+  o901 endif
+ o900 endif
+ 
+ o902 if [#<reengage> EQ 1]
+  G53 G90 G0 X#<x0_abs> Y#<y0_abs> (return to initial XY position)
+  M211 P1 (re-engage dust shoe conditionally - only if it was previously engaged)
+ o902 endif
 
 M72                                                                			(Restore saved modal state)
 G43.1 Z#<_new_tlo>															(Set Dynamic TLO)
