@@ -2946,7 +2946,7 @@ RESET</string>
                </widget>
               </item>
               <item>
-               <widget class="ActionButton" name="action_exit">
+               <widget class="QPushButton" name="btn_exit">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -2976,48 +2976,6 @@ RESET</string>
                 </property>
                 <property name="text">
                  <string>EXIT</string>
-                </property>
-                <property name="exit_action" stdset="0">
-                 <bool>true</bool>
-                </property>
-                <property name="template_label_option" stdset="0">
-                 <bool>false</bool>
-                </property>
-                <property name="joint_number" stdset="0">
-                 <number>0</number>
-                </property>
-                <property name="incr_imperial_number" stdset="0">
-                 <double>0.010000000000000</double>
-                </property>
-                <property name="incr_mm_number" stdset="0">
-                 <double>0.025000000000000</double>
-                </property>
-                <property name="incr_angular_number" stdset="0">
-                 <double>-1.000000000000000</double>
-                </property>
-                <property name="toggle_float_option" stdset="0">
-                 <bool>false</bool>
-                </property>
-                <property name="float_num" stdset="0">
-                 <double>100.000000000000000</double>
-                </property>
-                <property name="float_alt_num" stdset="0">
-                 <double>50.000000000000000</double>
-                </property>
-                <property name="view_type_string" stdset="0">
-                 <string>P</string>
-                </property>
-                <property name="command_text_string" stdset="0">
-                 <string/>
-                </property>
-                <property name="ini_mdi_number" stdset="0">
-                 <number>0</number>
-                </property>
-                <property name="textTemplate" stdset="0">
-                 <string>%1.3f in</string>
-                </property>
-                <property name="alt_textTemplate" stdset="0">
-                 <string>%1.2f mm</string>
                 </property>
                </widget>
               </item>
@@ -17346,6 +17304,28 @@ TOOL CHANGE</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btn_exit</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>exit_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1524</x>
+     <y>32</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1591</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_machine_on</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>action_machine_on_toggled(bool)</slot>
+  </connection>
  </connections>
  <designerdata>
   <property name="gridDeltaX">
@@ -17424,6 +17404,8 @@ TOOL CHANGE</string>
   <slot>btn_dustshoe_down_clicked()</slot>
   <slot>btn_dustshoe_up_clicked()</slot>
   <slot>btn_dustshoe_enabled_clicked(bool)</slot>
+  <slot>exit_clicked()</slot>
+  <slot>action_machine_on_toggled(bool)</slot>
  </slots>
  <buttongroups>
   <buttongroup name="mode_buttonGroup"/>
