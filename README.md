@@ -1,7 +1,7 @@
 # fj-lcnc-cfg
 This is a snapshot of key configuration files for my personal LinuxCNC installation, which may serve as an example for others looking to integrate a similar machine and/or features.
 
-Presently I'm running a v2.9.0 RIP build.
+Presently I'm running LinuxCNC v2.9.4 installed from the official ISO.
 
 What's included:
 * Machine config files
@@ -10,6 +10,9 @@ What's included:
   * Tool length measurement with tool setter
 * Modifications to the qtdragon UI
 * HAL components for VFD and air compressor control
+
+## Other dependencies:
+You need to create a python virtual environment in ```/usr/local/venv/linuxcnc_venv``` and install dependencies via requirements.txt.  This was required due to Debian 12 locking down python package management, and the adafruit-io library not being available via apt.
 
 ## Configuration Description
 The following are key details about my CNC machine, to give context to this overall configuration.
