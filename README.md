@@ -10,6 +10,7 @@ What's included:
   * Tool length measurement with tool setter
 * Modifications to the qtdragon UI
 * HAL components for VFD and air compressor control
+* Actuated dust shoe control (with automatic retract during tool changes)
 
 ## Other dependencies:
 You need to create a python virtual environment in ```/usr/local/venv/linuxcnc_venv``` and install dependencies via requirements.txt.  This was required due to Debian 12 locking down python package management, and the adafruit-io library not being available via apt.
