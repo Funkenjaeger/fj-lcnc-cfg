@@ -54,5 +54,5 @@ I started with the stock qtdragon UI and made a few changes:
 * Resized to best fit my 1600x1200 display
 * Added some indicators & controls in the lower right for tool changer-related items (tool pocket sensors, compressed air pressure sensor, auto/manual tool change mode)
 * Added some ATC-related buttons to the left pane of the tool tab
-![Screenshot_2022-09-11_20-58-16](https://user-images.githubusercontent.com/24237058/189557962-51730797-63c3-47d1-a49a-d7392fb95c13.png)
-
+* Added dust shoe controls center right
+<img width="665" height="467" alt="image" src="https://github.com/user-attachments/assets/966364ed-c023-435a-ba7c-0505c47945c8" />
