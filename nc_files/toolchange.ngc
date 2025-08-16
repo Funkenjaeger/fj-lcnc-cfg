@@ -61,6 +61,9 @@ o500 else
 			G4 P#<_ini[TOOL_CHANGE]DWELL_TIME_RACK>											(Wait for ATC rack actuation)
 			#<rack_extended> = 1			
 			G53 G0 Z#<_ini[TOOL_CHANGE]POCKET_Z> 											(Rapid Z to pocket height)
+			G91 (temporarily use incremental distance mode)
+			G1 X0 F1 (mitigate waiting on spindle at-speed upon first real G1 move)
+			G90 (restore absolute distance mode)
 			G53 G1 Y#<_ini[TOOL_CHANGE]POCKET_Y> F#<_ini[TOOL_CHANGE]APPROACH_VELOCITY_Y>	(Slot tool into pocket)
 			G4 P0.1
 			M66 P[#<_current_pocket>-1] L0
