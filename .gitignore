@@ -15,3 +15,4 @@ halshow.preferences
 *.var
 
 qtdragon.ui.*
+nc_files/jobs
