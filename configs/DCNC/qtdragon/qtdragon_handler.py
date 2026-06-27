@@ -521,6 +521,7 @@ class HandlerClass:
     def all_homed(self, obj):
         self.home_all = True
         self.w.btn_home_all.setText("ALL HOMED")
+        self.update_mdi_enable()
         if self.first_turnon is True:
             self.first_turnon = False
             if self.w.chk_reload_tool.isChecked():
@@ -538,6 +539,7 @@ class HandlerClass:
     def not_all_homed(self, obj, list):
         self.home_all = False
         self.w.btn_home_all.setText("HOME ALL")
+        self.update_mdi_enable()
 
     def hard_limit_tripped(self, obj, tripped, list_of_tripped):
         self.add_status("Hard limits tripped", CRITICAL)
@@ -555,6 +557,19 @@ class HandlerClass:
     def set_button_response_state(self, state):
         for i in (self.button_response_list):
             self.w[i].setEnabled(not state)
+        self.update_mdi_enable()
+
+    # The stock MDILine widget only re-evaluates its enabled state on a handful
+    # of signals (interp-idle/run, all-homed, state-off/estop) and has no handler
+    # for state-on or mode changes. That leaves the MDI entry stuck disabled after
+    # some transitions until unrelated activity happens to re-fire one of those
+    # signals (the "switch modes / reload file / toggle dust shoe to wake it up"
+    # behavior). Re-evaluate it explicitly on every relevant transition instead.
+    def update_mdi_enable(self):
+        enabled = (STATUS.machine_is_on()
+                   and (STATUS.is_all_homed() or INFO.NO_HOME_REQUIRED)
+                   and not STATUS.is_auto_mode())
+        self.w.mdiline.setEnabled(enabled)
 
     #######################
     # CALLBACKS FROM FORM #
@@ -1044,6 +1059,7 @@ class HandlerClass:
     def enable_auto(self, state):
         for widget in self.auto_list:
             self.w[widget].setEnabled(state)
+        self.update_mdi_enable()
         if state is True:
             if self.w.main_tab_widget.currentIndex() != TAB_SETUP:
                 self.w.jogging_frame.show()
@@ -1064,6 +1080,7 @@ class HandlerClass:
         self.h['eoffset-count'] = 0
         for widget in self.onoff_list:
             self.w[widget].setEnabled(state)
+        self.update_mdi_enable()
 
     def set_start_line(self, line):
         if self.w.chk_run_from_line.isChecked():
