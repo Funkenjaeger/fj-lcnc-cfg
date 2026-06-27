@@ -13,13 +13,15 @@ loadrt debounce cfg=3
 addf debounce.0    servo-thread
 # debounce delay LSB = ticks of servo-thread, i.e. 1ms
 setp debounce.0.delay 20
-loadrt or2 count=3
+loadrt or2 count=4
 addf or2.0 servo-thread
 addf or2.2 servo-thread
+addf or2.3 servo-thread
 loadrt lut5 count=1
 addf lut5.0 servo-thread
-loadrt not count=2
+loadrt not count=3
 addf not.0 servo-thread
+addf not.2 servo-thread
 loadrt estop_latch
 addf estop-latch.0 servo-thread
 loadusr hal_components/bin/wj200_vfd_emd --device /dev/ttyUSB0
@@ -368,7 +370,10 @@ net spindle-cw                 <=  	spindle.0.forward
 net spindle-ccw                <=  	spindle.0.reverse
 #net spindle-brake             <=	spindle.0.brake
 #net spindle-revs               =>  spindle.0.revs
-net spindle-at-speed            =>  spindle.0.at-speed
+net vfd-at-speed => or2.3.in0
+net spindle-run => not.2.in
+net spindle-not-on or2.3.in1 <= not.2.out
+net spindle-at-speed or2.3.out  =>  spindle.0.at-speed
 # WIP: WJ200_VFD doesn't support frequency readback, so just echo commanded
 #net spindle-vel-cmd-rps-abs		=> spindle.0.speed-in
 net spindle-vel-fb-rps          =>  spindle.0.speed-in

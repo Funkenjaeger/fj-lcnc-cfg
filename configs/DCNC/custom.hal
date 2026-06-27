@@ -8,9 +8,15 @@
 #net spindle-at-speed <= vfdmod.spindle.at-speed
 #net spindle-cw => vfdmod.control.run-forward
 #net spindle-ccw => vfdmod.control.run-reverse
+#addf or2.3 servo-thread
+#addf not.3 servo-thread
 
 setp wj200-vfd-emd.0.mbslaveaddr 1 
-net spindle-at-speed	<=  wj200-vfd-emd.0.is-at-speed
+net vfd-at-speed <= wj200-vfd-emd.0.is-at-speed
+#net spindle-on not.3.in <= spindle.0.on
+#net spindle-not-on or2.3.in1 <= not.3.out
+#net spindle-at-speed <= or2.3.out
+#net spindle-at-speed	<=  wj200-vfd-emd.0.is-at-speed
 net spindle-run			=> 	wj200-vfd-emd.0.run
 net spindle-ccw 		=> 	wj200-vfd-emd.0.reverse
 net machine-is-enabled	=>	wj200-vfd-emd.0.enable
