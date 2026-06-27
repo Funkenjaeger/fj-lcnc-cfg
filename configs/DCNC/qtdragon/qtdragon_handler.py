@@ -453,6 +453,9 @@ class HandlerClass:
         wait_code = bool(message.get('ID') == '_wait_resume_')
         unhome_code = bool(message.get('ID') == '_unhome_')
         overwrite = bool(message.get('ID') == '_overwrite_')
+        startup_confirm = bool(message.get('ID') == '_startup_tool_confirm_')
+        startup_different = bool(message.get('ID') == '_startup_tool_different_')
+        startup_number = bool(message.get('ID') == '_startup_tool_number_')
         if plate_code and name == 'MESSAGE' and rtn is True:
             self.touchoff('touchplate')
         elif sensor_code and name == 'MESSAGE' and rtn is True:
@@ -466,6 +469,41 @@ class HandlerClass:
                 self.do_file_copy()
             else:
                 self.add_status("File not copied")
+        elif startup_confirm and name == 'MESSAGE':
+            if rtn is True:
+                # remembered tool is correct - measure it (unless it's "no tool")
+                if STATUS.get_current_tool() != 0:
+                    self.measure_loaded_tool()
+                else:
+                    self.add_status("Startup: confirmed no tool loaded")
+            else:
+                # not correct - is a (different) tool actually loaded?
+                info = ("Is a tool currently loaded in the spindle?\n\n"
+                        "Yes: enter the correct tool number, then it will be "
+                        "measured at the tool setter.\n"
+                        "No: no tool is loaded.")
+                mess = {'NAME':'MESSAGE', 'ICON':'WARNING', 'ID':'_startup_tool_different_',
+                        'MESSAGE':'TOOL LOADED?', 'MORE':info, 'TYPE':'YESNO'}
+                ACTION.CALL_DIALOG(mess)
+        elif startup_different and name == 'MESSAGE':
+            if rtn is True:
+                mess = {'NAME':'ENTRY', 'ID':'_startup_tool_number_',
+                        'TITLE':'Enter loaded tool number'}
+                ACTION.CALL_DIALOG(mess)
+            else:
+                self.add_status("Startup: setting current tool to none (T0)")
+                ACTION.CALL_MDI_WAIT("M61 Q0", 10)
+        elif startup_number and name == 'ENTRY':
+            if rtn is None:
+                self.add_status("Startup tool entry cancelled - tool NOT measured", CRITICAL)
+            else:
+                tnum = int(round(rtn))
+                if tnum <= 0:
+                    self.add_status("Startup: setting current tool to none (T0)")
+                    ACTION.CALL_MDI_WAIT("M61 Q0", 10)
+                else:
+                    ACTION.CALL_MDI_WAIT("M61 Q{} G43".format(tnum), 10)
+                    self.measure_loaded_tool()
 
     def user_system_changed(self, data):
         sys = self.system_list[int(data) - 1]
@@ -526,13 +564,16 @@ class HandlerClass:
             self.first_turnon = False
             if self.w.chk_reload_tool.isChecked():
                 command = "M61 Q{} G43".format(self.reload_tool)
-                ACTION.CALL_MDI(command)
+                # WAIT so the tool number is set before we prompt to confirm it
+                ACTION.CALL_MDI_WAIT(command, 10)
             if self.last_loaded_program is not None and self.w.chk_reload_program.isChecked():
                 if os.path.isfile(self.last_loaded_program):
                     self.w.cmb_gcode_history.addItem(self.last_loaded_program)
                     self.w.cmb_gcode_history.setCurrentIndex(self.w.cmb_gcode_history.count() - 1)
                     self.w.cmb_gcode_history.setToolTip(self.last_loaded_program)
                     ACTION.OPEN_PROGRAM(self.last_loaded_program)
+            # Safety: confirm the remembered tool and re-measure its length offset
+            self.confirm_startup_tool()
         ACTION.SET_MANUAL_MODE()
         self.w.manual_mode_button.setChecked(True)
 
@@ -540,6 +581,36 @@ class HandlerClass:
         self.home_all = False
         self.w.btn_home_all.setText("HOME ALL")
         self.update_mdi_enable()
+
+    # Safety check run once after the first homing of a session. LinuxCNC
+    # remembers the previous session's tool number but its length offset is not
+    # reliably persisted (effectively 0). If that unmeasured tool is used to zero
+    # Z and a later automatic tool change measures a real (large-negative) offset,
+    # the WCS Z shifts by inches - an out-of-bounds error at best, a crash at
+    # worst. So confirm what is physically in the spindle and re-measure it.
+    def confirm_startup_tool(self):
+        tool = STATUS.get_current_tool()
+        if tool == 0:
+            info = ("LinuxCNC believes NO tool is loaded.\n\n"
+                    "Is that correct?\n\n"
+                    "(Choose No if a tool is actually loaded - you will enter its "
+                    "number and it will be measured at the tool setter.)")
+        else:
+            info = ("LinuxCNC believes tool T{} is loaded.\n\n"
+                    "Is that correct?\n\n"
+                    "Choosing Yes will measure its length at the tool setter."
+                    .format(tool))
+        mess = {'NAME':'MESSAGE', 'ICON':'WARNING', 'ID':'_startup_tool_confirm_',
+                'MESSAGE':'CONFIRM LOADED TOOL', 'MORE':info, 'TYPE':'YESNO'}
+        ACTION.CALL_DIALOG(mess)
+
+    # Run the existing tool-setter measure routine (M201) to set a fresh dynamic
+    # TLO for whatever tool is currently loaded. No P argument so it returns to
+    # the starting XY and re-engages the dust shoe if it was engaged. mode_return
+    # so we don't leave the machine stuck in MDI mode afterward.
+    def measure_loaded_tool(self):
+        self.add_status("Measuring tool length at tool setter")
+        ACTION.CALL_MDI_WAIT("M201", 120, mode_return=True)
 
     def hard_limit_tripped(self, obj, tripped, list_of_tripped):
         self.add_status("Hard limits tripped", CRITICAL)
