@@ -845,20 +845,24 @@ class HandlerClass:
         ACTION.CALL_DIALOG(mess)
         
     # dust shoe
+    # Use CALL_MDI_WAIT(..., mode_return=True) so we don't leave the machine
+    # stuck in MDI mode after the move (which breaks pendant jogging until the
+    # user manually switches back to Manual). Generous timeout because the
+    # M210/M211 remaps run real motion sequences with dwells.
     def btn_dustshoe_down_clicked(self):
-        ACTION.CALL_MDI("M211")
+        ACTION.CALL_MDI_WAIT("M211", 30, mode_return=True)
         self.add_status("Dust shoe engaged")
-        
+
     def btn_dustshoe_up_clicked(self):
-        ACTION.CALL_MDI("M210")
+        ACTION.CALL_MDI_WAIT("M210", 30, mode_return=True)
         self.add_status("Dust shoe retracted")
-        
+
     def btn_dustshoe_enabled_clicked(self, checked):
         if checked:
             self.add_status("Dust shoe in auto mode (controlled by G-code)")
         else:
             self.add_status("Dust shoe disabled")
-            ACTION.CALL_MDI("M210")
+            ACTION.CALL_MDI_WAIT("M210", 30, mode_return=True)
         
     # status tab
     def btn_clear_status_clicked(self):
