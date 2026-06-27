@@ -39,7 +39,18 @@ o<measure> sub
  ; forces the approach motion to finish before the optical sensor is enabled.
  M66 P6 L0																	(Queue buster: finish approach before enabling optical)
  M64 P2																		(Turn on optical sensor)
- G38.2 G90 Z#<_ini[TOOLSENSOR]Z_PROBE_END> F#<_ini[TOOLSENSOR]SEARCH_VEL>	(Probe move to optical sensor)
+ ; --- No-tool detection ---
+ ; Probe down only as far as the go/no-go threshold, using G38.3 so a no-trip is
+ ; NOT an error. A properly-loaded tool breaks the optical beam ABOVE this Z; if
+ ; we reach the threshold without a trip (#5070 == 0) there is no valid tool in
+ ; the spindle, so retract and abort rather than continue plunging at the setter.
+ G38.3 G90 Z#<_ini[TOOLSENSOR]Z_NO_TOOL> F#<_ini[TOOLSENSOR]SEARCH_VEL>		(Approach to no-tool threshold)
+ o400 if [#5070 EQ 0]
+  M65 P2																	(Turn off optical sensor)
+  G53 G90 G0 Z#<_ini[TOOLSENSOR]Z_SAFE>										(Retract to safe Z before aborting)
+  (abort,No tool detected at tool setter - confirm a tool is actually loaded)
+ o400 endif
+ ; --- Tool detected above threshold, proceed with normal measurement ---
  M65 P2																		(Turn off optical sensor)
  M66 P6 L4 Q1																(Wait for optical-in to deactivate)
  G38.2 G90 Z#<_ini[TOOLSENSOR]Z_PROBE_END> F#<_ini[TOOLSENSOR]COARSE_VEL>	(Measure Gross)
