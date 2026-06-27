@@ -84,8 +84,8 @@ o500 else
 				(abort,Tool not in pocket after Z retract)
 			o313 endif
 			M61 Q0																			(Set current tool to 0)
-		o213 elseif [#<_current_pocket> LT 0]
-			(Manually unload current tool)
+		o213 elseif [#<_current_tool> NE 0 AND #<_current_pocket> LT 0]
+			(Manually unload current tool - negative pocket = manual, but T0 is 'no tool')
 			#<st> = #<_selected_tool>
 			G90 G0															(Absolute distance mode Rapid move)
 			G53 Z#<_ini[TOOLSENSOR]Z_SAFE>									(Change Z Position)
@@ -122,8 +122,8 @@ o500 else
 			o315 endif
 			G53 G0 Z0																		(Rapid retract Z)
 			M61 Q#<_selected_tool>															(Set current tool)
-		o214 elseif [#<_selected_pocket> LT 0]
-			(Manually load selected tool)
+		o214 elseif [#<_selected_tool> NE 0 AND #<_selected_pocket> LT 0]
+			(Manually load selected tool - negative pocket = manual, but T0 is 'no tool')
 			M63 P0 															(Engage drawbar)
 			G90 G0															(Absolute distance mode Rapid move)
 			G53 Z#<_ini[TOOLSENSOR]Z_SAFE>									(Change Z Position)
