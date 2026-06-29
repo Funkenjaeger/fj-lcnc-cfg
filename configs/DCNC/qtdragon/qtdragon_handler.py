@@ -68,6 +68,9 @@ class HandlerClass:
         self.reload_tool = 0
         self.last_loaded_program = ""
         self.first_turnon = True
+        # set when a GUI button issues an MDI command, so we can drop back to
+        # MANUAL mode once the interpreter goes idle (see call_mdi_return)
+        self._return_to_manual = False
         self.lineedit_list = ["work_height", "touch_height", "sensor_height", "laser_x", "laser_y",
                               "sensor_x", "sensor_y", "camera_x", "camera_y",
                               "search_vel", "probe_vel", "max_probe", "eoffset_count"]
@@ -629,6 +632,20 @@ class HandlerClass:
         for i in (self.button_response_list):
             self.w[i].setEnabled(not state)
         self.update_mdi_enable()
+        # interp went idle after a button-initiated MDI command: return to MANUAL
+        # mode so pendant jogging keeps working. Gated on the flag so manual MDI
+        # typing (which we did not initiate) is left in MDI mode as the user expects.
+        if state is False and self._return_to_manual:
+            self._return_to_manual = False
+            ACTION.SET_MANUAL_MODE()
+
+    # Issue an MDI command from a GUI button and automatically return to MANUAL
+    # mode once the interpreter goes idle. Non-blocking, unlike CALL_MDI_WAIT, so
+    # the GUI stays responsive during long operations (e.g. a full tool change),
+    # while still avoiding the "machine left stuck in MDI mode" jogging trap.
+    def call_mdi_return(self, command):
+        self._return_to_manual = True
+        ACTION.CALL_MDI(command)
 
     # The stock MDILine widget only re-evaluates its enabled state on a handful
     # of signals (interp-idle/run, all-homed, state-off/estop) and has no handler
@@ -871,6 +888,8 @@ class HandlerClass:
         ACTION.CALL_MDI_WAIT("G53 G0 Z0")
         command = "G53 G0 X{:3.4f} Y{:3.4f}".format(x, y)
         ACTION.CALL_MDI_WAIT(command, 10)
+        # don't leave the machine stuck in MDI mode (breaks pendant jogging)
+        ACTION.SET_MANUAL_MODE()
  
     def btn_ref_laser_clicked(self):
         x = float(self.w.lineEdit_laser_x.text())
@@ -880,7 +899,7 @@ class HandlerClass:
             y = y / 25.4
         self.add_status("Laser offsets set")
         command = "G10 L20 P0 X{:3.4f} Y{:3.4f}".format(x, y)
-        ACTION.CALL_MDI(command)
+        self.call_mdi_return(command)
     
     def btn_ref_camera_clicked(self):
         x = float(self.w.lineEdit_camera_x.text())
@@ -890,7 +909,7 @@ class HandlerClass:
             y = y / 25.4
         self.add_status("Camera offsets set")
         command = "G10 L20 P0 X{:3.4f} Y{:3.4f}".format(x, y)
-        ACTION.CALL_MDI(command)
+        self.call_mdi_return(command)
     
     # tool tab
     def btn_m61_clicked(self):
@@ -899,7 +918,7 @@ class HandlerClass:
             self.add_status("Select only 1 tool to load", WARNING)
         elif checked:
             self.add_status("Loaded tool {}".format(checked[0]))
-            ACTION.CALL_MDI("M61 Q{} G43".format(checked[0]))
+            self.call_mdi_return("M61 Q{} G43".format(checked[0]))
         else:
             self.add_status("No tool selected", CRITICAL)
             
@@ -909,13 +928,13 @@ class HandlerClass:
             self.add_status("Select only 1 tool to load", WARNING)
         elif checked:
             self.add_status("Changing to tool {}".format(checked[0]))
-            ACTION.CALL_MDI("T{} M6".format(checked[0]))
+            self.call_mdi_return("T{} M6".format(checked[0]))
         else:
             self.add_status("No tool selected", CRITICAL)
             
     def btn_unload_tool_clicked(self):
         self.add_status("Unloading tool")
-        ACTION.CALL_MDI("T0 M6")
+        self.call_mdi_return("T0 M6")
 
     def btn_touchoff_clicked(self):
         if STATUS.get_current_tool() == 0:
