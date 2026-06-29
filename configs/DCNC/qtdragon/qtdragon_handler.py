@@ -692,8 +692,13 @@ class HandlerClass:
                 self.w.stackedWidget.setCurrentIndex(4)
 
     def exit_clicked(self):
-        self.add_status("Retracting dust shoe before exit")
-        ACTION.CALL_MDI_WAIT("M210")
+        # Only retract the dust shoe if the machine can actually move it. Exiting
+        # from E-stop / machine-off (a common way to shut down) would otherwise
+        # throw "cannot be executed until the machine is out of E-stop and turned
+        # on" because M210 is a G-code move.
+        if STATUS.machine_is_on() and STATUS.is_all_homed():
+            self.add_status("Retracting dust shoe before exit")
+            ACTION.CALL_MDI_WAIT("M210")
         self.w.close()
 
     def wait_air_pressure(self):
