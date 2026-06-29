@@ -30,6 +30,14 @@ o<measure> sub
  o300 endif
  
  (Measure tool to get offset)
+ ; M64 is an IMMEDIATE output - it executes at interpreter read-ahead time, not
+ ; synchronized with motion. With an empty motion queue (e.g. the startup
+ ; remeasure) the interpreter reads far ahead and enables the optical sensor
+ ; while the approach moves are still running, so a long tool sweeping into the
+ ; beam during a non-probe move trips "probe tripped during non-probe move".
+ ; M66 ... L0 reads an input immediately, which busts the read-ahead queue and
+ ; forces the approach motion to finish before the optical sensor is enabled.
+ M66 P6 L0																	(Queue buster: finish approach before enabling optical)
  M64 P2																		(Turn on optical sensor)
  G38.2 G90 Z#<_ini[TOOLSENSOR]Z_PROBE_END> F#<_ini[TOOLSENSOR]SEARCH_VEL>	(Probe move to optical sensor)
  M65 P2																		(Turn off optical sensor)
